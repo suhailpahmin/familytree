@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1067667047758",
+    "firebase_url": "https://familytree-db6cc.firebaseio.com",
+    "project_id": "familytree-db6cc",
+    "storage_bucket": "familytree-db6cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1067667047758:android:0472796c030d05e0168a1f",
+        "android_client_info": {
+          "package_name": "com.proclive.familytree"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1067667047758-2k8e45mqokcm9ej22kgakjfgot382rm3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCymXlmhfyM4vEFS8g2di1Vxz9HpktmgvY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1067667047758-2k8e45mqokcm9ej22kgakjfgot382rm3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
