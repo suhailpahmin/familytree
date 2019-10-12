@@ -13,11 +13,15 @@ class LoginViewModel extends BaseModel {
 
   LoginViewModel({FirebaseAuthProvider firebaseAuth}) : _auth = firebaseAuth;
 
-  void loginUser(String email, String password) async {
+  Future<FirebaseUser> loginUser() async {
     setBusy(true);
-    _user = await _auth.login(email, password);
-    notifyListeners();
+    _user = await _auth.login(_email, _password);
     setBusy(false);
+    if (_user != null && _user.uid.isNotEmpty) {
+      return _user;
+    } else {
+      return null;
+    }
   }
 
   void setEmail(String value) {

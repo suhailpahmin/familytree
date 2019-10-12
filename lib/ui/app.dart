@@ -10,7 +10,7 @@ class FamilyTreeApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: RootScreen(),
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primaryColor: ColorPalette.keppelColor,
       ),
       initialRoute: RoutePaths.Root,
       onGenerateRoute: Router.generateRoute,

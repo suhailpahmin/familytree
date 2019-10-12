@@ -25,7 +25,7 @@ class LoginFooter extends StatelessWidget {
             child: Text(
               'Daftar sekarang',
               style: TextStyle(
-                color: Colors.green,
+                color: ColorPalette.keppelColor,
               ),
             ),
           )

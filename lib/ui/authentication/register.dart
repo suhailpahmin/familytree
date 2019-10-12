@@ -1,8 +1,8 @@
+import 'package:familytree/core/constants/app_constants.dart';
 import 'package:familytree/core/providers/firebase_auth.dart';
 import 'package:familytree/core/viewmodels/views/register_view_model.dart';
 import 'package:familytree/ui/helper/base_widget.dart';
 import 'package:familytree/ui/helper/loading_overlay.dart';
-import 'package:familytree/ui/main/home.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:toast/toast.dart';
@@ -24,12 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       formState.save();
       var result = await rvm.registerUser();
       if (rvm.user != null && rvm.user.uid.isNotEmpty) {
-        var route = MaterialPageRoute(
-          builder: (context) => new HomeScreen(
-            userID: result,
-          ),
-        );
-        Navigator.pushReplacement(context, route);
+        Navigator.pushReplacementNamed(context, RoutePaths.Home);
       } else {
         Toast.show(
           result,
@@ -56,7 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             elevation: 0.0,
             backgroundColor: Colors.transparent,
             iconTheme: IconThemeData(
-              color: Colors.green,
+              color: ColorPalette.oceanGreenColor,
             ),
           ),
           body: Stack(
@@ -97,8 +92,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     contentPadding: EdgeInsets.all(15.0),
                                     hintText: 'Nama',
                                     suffixIcon: Icon(
-                                      FontAwesomeIcons.envelope,
-                                      color: Colors.green,
+                                      FontAwesomeIcons.user,
+                                      color: ColorPalette.keppelColor,
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.only(
@@ -116,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         bottomRight: Radius.circular(15.0),
                                       ),
                                       borderSide: BorderSide(
-                                        color: Colors.green,
+                                        color: ColorPalette.oceanGreenColor,
                                         width: 2,
                                       ),
                                     ),
@@ -148,7 +143,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     hintText: 'Emel',
                                     suffixIcon: Icon(
                                       FontAwesomeIcons.envelope,
-                                      color: Colors.green,
+                                      color: ColorPalette.keppelColor,
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.only(
@@ -166,7 +161,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         bottomRight: Radius.circular(15.0),
                                       ),
                                       borderSide: BorderSide(
-                                        color: Colors.green,
+                                        color: ColorPalette.oceanGreenColor,
                                         width: 2,
                                       ),
                                     ),
@@ -198,7 +193,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     hintText: 'Kata Laluan',
                                     suffixIcon: Icon(
                                       Icons.lock_outline,
-                                      color: Colors.green,
+                                      color: ColorPalette.keppelColor,
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.only(
@@ -216,7 +211,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         bottomRight: Radius.circular(15.0),
                                       ),
                                       borderSide: BorderSide(
-                                        color: Colors.green,
+                                        color: ColorPalette.oceanGreenColor,
                                         width: 2,
                                       ),
                                     ),
@@ -247,7 +242,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     hintText: 'Masuk Semula Kata Laluan',
                                     suffixIcon: Icon(
                                       Icons.lock_outline,
-                                      color: Colors.green,
+                                      color: ColorPalette.keppelColor,
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.only(
@@ -265,7 +260,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         bottomRight: Radius.circular(15.0),
                                       ),
                                       borderSide: BorderSide(
-                                        color: Colors.green,
+                                        color: ColorPalette.oceanGreenColor,
                                         width: 2,
                                       ),
                                     ),
@@ -285,6 +280,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   children: <Widget>[
                                     Flexible(
                                       child: RadioListTile(
+                                        activeColor: ColorPalette.keppelColor,
                                         groupValue: model.genderIndex,
                                         title: Text('Lelaki'),
                                         value: 0,
@@ -309,12 +305,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         Center(
                           child: RaisedButton(
-                            color: Colors.green,
+                            color: ColorPalette.blueSapphireColor,
                             onPressed: _onSignUp,
                             child: Text(
                               'Daftar',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: ColorPalette.teaGreenColor,
                               ),
                             ),
                             shape: RoundedRectangleBorder(

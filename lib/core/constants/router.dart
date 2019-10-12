@@ -9,7 +9,7 @@ class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RoutePaths.Home:
-        return MaterialPageRoute(builder: (_) => HomeScreen());
+        return MaterialPageRoute(builder: (context) => HomeScreen());
       case RoutePaths.Login:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case RoutePaths.Root:

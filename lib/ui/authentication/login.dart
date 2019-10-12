@@ -1,3 +1,4 @@
+import 'package:familytree/core/constants/app_constants.dart';
 import 'package:familytree/core/providers/firebase_auth.dart';
 import 'package:familytree/core/viewmodels/views/login_view_model.dart';
 import 'package:familytree/ui/authentication/login-ui/login_footer.dart';
@@ -5,7 +6,9 @@ import 'package:familytree/ui/authentication/login-ui/login_form.dart';
 import 'package:familytree/ui/authentication/login-ui/login_header.dart';
 import 'package:familytree/ui/helper/base_widget.dart';
 import 'package:familytree/ui/helper/loading_overlay.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -17,10 +20,25 @@ class _LoginScreenState extends State<LoginScreen> {
   RegExp emailRegExp = new RegExp(
       r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
 
-  void _authenticate() {
+  void _authenticate(Function loginUser) async {
     var keyState = _formKey.currentState;
     if (keyState.validate()) {
       keyState.save();
+      FirebaseUser user = await loginUser();
+      if (user != null) {
+        Navigator.pushReplacementNamed(
+          context,
+          RoutePaths.Home,
+          arguments: user.uid,
+        );
+      } else {
+        Toast.show(
+          'Authentication failed',
+          context,
+          duration: Toast.LENGTH_LONG,
+          gravity: Toast.BOTTOM,
+        );
+      }
     }
   }
 
@@ -45,8 +63,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         setPassword: model.setPassword,
                       ),
                       RaisedButton(
-                        color: Colors.green,
-                        onPressed: _authenticate,
+                        color: ColorPalette.blueSapphireColor,
+                        onPressed: () => _authenticate(model.loginUser),
                         child: Text(
                           'Log Masuk',
                           style: TextStyle(

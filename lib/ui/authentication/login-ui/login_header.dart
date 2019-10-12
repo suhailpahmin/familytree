@@ -1,3 +1,4 @@
+import 'package:familytree/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -14,7 +15,7 @@ class LoginHeader extends StatelessWidget {
         children: <Widget>[
           Icon(
             FontAwesomeIcons.leaf,
-            color: Colors.green,
+            color: ColorPalette.oceanGreenColor,
           ),
           Text(
             'Family Tree',

@@ -20,7 +20,9 @@ class _RootScreenState extends State<RootScreen> {
       onModelReady: (model) => model.initializeLogin(),
       builder: (context, model, child) => model.busy
           ? SplashScreen()
-          : model.user?.uid == null ? LoginScreen() : HomeScreen(),
+          : model.user?.uid == null
+              ? LoginScreen()
+              : HomeScreen(),
     );
   }
 }

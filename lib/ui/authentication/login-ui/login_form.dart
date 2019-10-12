@@ -1,3 +1,4 @@
+import 'package:familytree/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -39,7 +40,7 @@ class _LoginFormState extends State<LoginForm> {
                 hintText: 'Emel',
                 suffixIcon: Icon(
                   FontAwesomeIcons.envelope,
-                  color: Colors.green,
+                  color: ColorPalette.keppelColor,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.only(
@@ -57,7 +58,7 @@ class _LoginFormState extends State<LoginForm> {
                     bottomRight: Radius.circular(15.0),
                   ),
                   borderSide: BorderSide(
-                    color: Colors.green,
+                    color: ColorPalette.oceanGreenColor,
                     width: 2,
                   ),
                 ),
@@ -90,7 +91,7 @@ class _LoginFormState extends State<LoginForm> {
                 hintText: 'Kata Laluan',
                 suffixIcon: Icon(
                   Icons.lock_outline,
-                  color: Colors.green,
+                  color: ColorPalette.keppelColor,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.only(
@@ -108,7 +109,7 @@ class _LoginFormState extends State<LoginForm> {
                     bottomRight: Radius.circular(15.0),
                   ),
                   borderSide: BorderSide(
-                    color: Colors.green,
+                    color: ColorPalette.oceanGreenColor,
                     width: 2,
                   ),
                 ),
