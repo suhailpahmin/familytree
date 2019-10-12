@@ -129,7 +129,48 @@ class _PictoriesScreenState extends State<PictoriesScreen> {
                       ),
                     ),
                     model.hasFamily != null && model.hasFamily
-                        ? Container()
+                        ? model.pictories.length > 0
+                            ? Container(
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: model.pictories.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) =>
+                                          ListTile(
+                                    title: Row(
+                                      children: <Widget>[
+                                        Text(
+                                          model.pictories[index].postedBy,
+                                          style: TextStyle(
+                                            fontSize: screenSize.height * 0.022,
+                                              color: ColorPalette.blueSapphireColor,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 10.0),
+                                          child: Text(
+                                            model.pictories[index].createdOn,
+                                            style: TextStyle(
+                                              fontSize:
+                                                  screenSize.height * 0.02,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    subtitle: Text(
+                                      model.pictories[index].caption,
+                                      style: TextStyle(
+                                        fontSize: screenSize.height * 0.025,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container()
                         : Expanded(
                             child: Container(
                               child: Center(
@@ -158,12 +199,11 @@ class _PictoriesScreenState extends State<PictoriesScreen> {
             ),
             model.hasFamily != null && model.hasFamily
                 ? Positioned(
-                    top: screenSize.height * 0.83,
-                    right: screenSize.width * 0.05,
-                    child: FloatingActionButton.extended(
+                    top: screenSize.height * 0.8,
+                    right: screenSize.width * 0.07,
+                    child: FloatingActionButton(
                       onPressed: newPictory,
-                      icon: Icon(Icons.edit),
-                      label: Text('Tambah'),
+                      child: Icon(Icons.edit),
                     ),
                   )
                 : Container(),
