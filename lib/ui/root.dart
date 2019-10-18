@@ -14,15 +14,11 @@ class _RootScreenState extends State<RootScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseWidget<RootViewModel>(
-      model: RootViewModel(
-        firebaseAuthProvider: new FirebaseAuthProvider(),
-      ),
+      model: RootViewModel(firebaseAuthProvider: new FirebaseAuthProvider()),
       onModelReady: (model) => model.initializeLogin(),
       builder: (context, model, child) => model.busy
           ? SplashScreen()
-          : model.user?.uid == null
-              ? LoginScreen()
-              : HomeScreen(),
+          : model.user?.uid == null ? LoginScreen() : HomeScreen(),
     );
   }
 }

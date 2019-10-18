@@ -18,7 +18,7 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return Container(
-      height: screenSize.height * 0.3,
+      height: screenSize.height * 0.2,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[

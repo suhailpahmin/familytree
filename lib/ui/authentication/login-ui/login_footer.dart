@@ -16,6 +16,7 @@ class LoginFooter extends StatelessWidget {
             'Tiada akaun?',
             style: TextStyle(
               color: Colors.black,
+              fontSize: screenSize.height * 0.018,
             ),
           ),
           FlatButton(
@@ -26,6 +27,7 @@ class LoginFooter extends StatelessWidget {
               'Daftar sekarang',
               style: TextStyle(
                 color: ColorPalette.keppelColor,
+                fontSize: screenSize.height * 0.018,
               ),
             ),
           )

@@ -1,6 +1,7 @@
 import 'package:familytree/core/constants/app_constants.dart';
 import 'package:familytree/ui/authentication/login.dart';
 import 'package:familytree/ui/authentication/register.dart';
+import 'package:familytree/ui/main/firsttime.dart';
 import 'package:familytree/ui/main/home.dart';
 import 'package:familytree/ui/root.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ class Router {
     switch (settings.name) {
       case RoutePaths.Home:
         return MaterialPageRoute(builder: (context) => HomeScreen());
+      case RoutePaths.FirstTime:
+        return MaterialPageRoute(builder: (context) => FirstTimeScreen());
       case RoutePaths.Login:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case RoutePaths.Root:

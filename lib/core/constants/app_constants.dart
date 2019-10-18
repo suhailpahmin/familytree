@@ -6,6 +6,7 @@ class RoutePaths {
   static const String Home = '/';
   static const String Register = 'register';
   static const String RegisterFamily = 'registerfamily';
+  static const String FirstTime = 'firsttime';
 }
 
 class ColorPalette {

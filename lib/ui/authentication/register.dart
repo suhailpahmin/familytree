@@ -4,7 +4,9 @@ import 'package:familytree/core/viewmodels/views/register_view_model.dart';
 import 'package:familytree/ui/helper/base_widget.dart';
 import 'package:familytree/ui/helper/loading_overlay.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:toast/toast.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -16,6 +18,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   RegExp emailRegExp = new RegExp(
       r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
   RegisterViewModel rvm;
+  String _dateFormat = 'dd MM yyyy';
+  DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
 
   void _onSignUp() async {
     var formState = _formKey.currentState;
@@ -24,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       formState.save();
       var result = await rvm.registerUser();
       if (rvm.user != null && rvm.user.uid.isNotEmpty) {
-        Navigator.pushReplacementNamed(context, RoutePaths.Home);
+        Navigator.pushReplacementNamed(context, RoutePaths.FirstTime);
       } else {
         Toast.show(
           result,
@@ -34,6 +38,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
       }
     }
+  }
+
+  void _showDatePicker(Function(DateTime value) setBirthDate) {
+    DatePicker.showDatePicker(
+      context,
+      pickerTheme: DateTimePickerTheme(
+        showTitle: true,
+        confirm: Text(
+          'Terima',
+          style: TextStyle(
+            color: ColorPalette.oceanGreenColor,
+          ),
+        ),
+        cancel: Text(
+          'Batal',
+          style: TextStyle(
+            color: Colors.red,
+          ),
+        ),
+      ),
+      initialDateTime: DateTime.now(),
+      dateFormat: _dateFormat,
+      locale: _locale,
+      onConfirm: (dateTime, List<int> index) => setBirthDate(dateTime),
+    );
   }
 
   @override
@@ -87,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     return null;
                                   },
                                   onSaved: (value) => model.setName(value),
-                                  keyboardType: TextInputType.emailAddress,
+                                  keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(15.0),
                                     hintText: 'Nama',
@@ -126,6 +155,87 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       ),
                                     ),
                                   ),
+                                ),
+                                InternationalPhoneNumberInput
+                                    .withCustomDecoration(
+                                  onInputChanged: (value) =>
+                                      model.setPhoneNumber(value),
+                                  initialCountry2LetterCode: 'MY',
+                                  inputDecoration: InputDecoration(
+                                    hintText: 'Telefon',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(15.0),
+                                        bottomRight: Radius.circular(15.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey[350],
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15.0),
+                                      bottomRight: Radius.circular(15.0),
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 5.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Container(
+                                          padding: EdgeInsets.only(left: 20.0),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text(
+                                                'Tarikh Lahir : ',
+                                                style: TextStyle(
+                                                  color: Colors.black45,
+                                                ),
+                                              ),
+                                              Text(
+                                                '${model.birthDate.day.toString().padLeft(2, '0')} ${model.birthDate.month.toString().padLeft(2, '0')} ${model.birthDate.year}',
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: Icon(Icons.arrow_drop_down),
+                                          onPressed: () => _showDatePicker(
+                                              model.setBirthDate),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Flexible(
+                                      child: RadioListTile(
+                                        activeColor: ColorPalette.keppelColor,
+                                        groupValue: model.genderIndex,
+                                        title: Text('Lelaki'),
+                                        value: 0,
+                                        onChanged: (value) =>
+                                            model.setGender(value),
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child: RadioListTile(
+                                        groupValue: model.genderIndex,
+                                        title: Text('Wanita'),
+                                        value: 1,
+                                        onChanged: (value) =>
+                                            model.setGender(value),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 TextFormField(
                                   validator: (value) {
@@ -276,47 +386,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ),
                                   ),
                                 ),
-                                Row(
-                                  children: <Widget>[
-                                    Flexible(
-                                      child: RadioListTile(
-                                        activeColor: ColorPalette.keppelColor,
-                                        groupValue: model.genderIndex,
-                                        title: Text('Lelaki'),
-                                        value: 0,
-                                        onChanged: (value) =>
-                                            model.setGender(value),
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: RadioListTile(
-                                        groupValue: model.genderIndex,
-                                        title: Text('Wanita'),
-                                        value: 1,
-                                        onChanged: (value) =>
-                                            model.setGender(value),
-                                      ),
-                                    ),
-                                  ],
-                                ),
                               ],
                             ),
                           ),
                         ),
                         Center(
-                          child: RaisedButton(
-                            color: ColorPalette.blueSapphireColor,
-                            onPressed: _onSignUp,
-                            child: Text(
-                              'Daftar',
-                              style: TextStyle(
-                                color: ColorPalette.teaGreenColor,
+                          child: Container(
+                            width: screenSize.width * 0.5,
+                            height: screenSize.height * 0.05,
+                            child: RaisedButton(
+                              color: ColorPalette.blueSapphireColor,
+                              onPressed: _onSignUp,
+                              child: Text(
+                                'Daftar',
+                                style: TextStyle(
+                                  color: ColorPalette.teaGreenColor,
+                                ),
                               ),
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15.0),
-                                bottomLeft: Radius.circular(15.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(15.0),
+                                  bottomLeft: Radius.circular(15.0),
+                                ),
                               ),
                             ),
                           ),

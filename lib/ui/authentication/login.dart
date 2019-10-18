@@ -44,6 +44,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     return BaseWidget<LoginViewModel>(
       model: LoginViewModel(firebaseAuth: new FirebaseAuthProvider()),
       builder: (context, model, child) => Scaffold(
@@ -55,31 +57,39 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      LoginHeader(),
-                      LoginForm(
-                        setEmail: model.setEmail,
-                        setPassword: model.setPassword,
-                      ),
-                      RaisedButton(
-                        color: ColorPalette.blueSapphireColor,
-                        onPressed: () => _authenticate(model.loginUser),
-                        child: Text(
-                          'Log Masuk',
-                          style: TextStyle(
-                            color: Colors.white,
+                  child: Container(
+                    height: screenSize.height * 0.7,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        LoginHeader(),
+                        LoginForm(
+                          setEmail: model.setEmail,
+                          setPassword: model.setPassword,
+                        ),
+                        Container(
+                          width: screenSize.width * 0.5,
+                          height: screenSize.height * 0.05,
+                          child: RaisedButton(
+                            color: ColorPalette.blueSapphireColor,
+                            onPressed: () => _authenticate(model.loginUser),
+                            child: Text(
+                              'Log Masuk',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(15.0),
+                                bottomLeft: Radius.circular(15.0),
+                              ),
+                            ),
                           ),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(15.0),
-                            bottomLeft: Radius.circular(15.0),
-                          ),
-                        ),
-                      ),
-                      LoginFooter(),
-                    ],
+                        LoginFooter(),
+                      ],
+                    ),
                   ),
                 ),
               ),

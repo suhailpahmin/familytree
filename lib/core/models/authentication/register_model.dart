@@ -1,8 +1,11 @@
-class RegisterUser {
-  String email;
-  String password;
-  String name;
-  String gender;
+class User {
+  final String email;
+  final String password;
+  final String name;
+  final String gender;
+  final String phoneNumber;
+  final DateTime birthDate;
+  String id;
 
-  RegisterUser({this.email, this.password, this.name, this.gender});
+  User({this.email, this.password, this.name, this.gender, this.phoneNumber, this.birthDate});
 }

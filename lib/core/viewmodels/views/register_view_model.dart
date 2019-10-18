@@ -13,6 +13,10 @@ class RegisterViewModel extends BaseModel {
   String get password => _password;
   String _name = "";
   String get name => _name;
+  String _phoneNumber = '';
+  String get phoneNumber => _phoneNumber;
+  DateTime _birthDate = DateTime.now();
+  DateTime get birthDate => _birthDate;
   int _genderIndex = 0;
   int get genderIndex => _genderIndex;
   String _gender = "Lelaki";
@@ -23,11 +27,13 @@ class RegisterViewModel extends BaseModel {
 
   Future<String> registerUser() async {
     setBusy(true);
-    _user = await _auth.register(new RegisterUser(
+    _user = await _auth.register(new User(
       email: _email,
       password: _password,
       name: _name,
       gender: _gender,
+      phoneNumber: _phoneNumber,
+      birthDate: _birthDate
     )).catchError((error) {
       return error.toString();
     });
@@ -42,6 +48,16 @@ class RegisterViewModel extends BaseModel {
 
   void setEmail(String value) {
     _email = value;
+    notifyListeners();
+  }
+
+  void setPhoneNumber(String value) {
+    _phoneNumber = value;
+    notifyListeners();
+  }
+
+  void setBirthDate(DateTime value) {
+    _birthDate = value;
     notifyListeners();
   }
 

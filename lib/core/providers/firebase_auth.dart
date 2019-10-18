@@ -8,6 +8,9 @@ class FirebaseAuthProvider implements AuthApi {
   final FirebaseAuth _fireAuth = FirebaseAuth.instance;
   final Firestore _fireStore = Firestore.instance;
 
+  StreamController<User> _userController = StreamController<User>.broadcast();
+  Stream<User> get user => _userController.stream;
+
   @override
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser user = await _fireAuth.currentUser();
@@ -22,12 +25,14 @@ class FirebaseAuthProvider implements AuthApi {
   }
 
   @override
-  Future<FirebaseUser> register(RegisterUser registerData) async {
+  Future<FirebaseUser> register(User registerData) async {
     var authResult = await _fireAuth
         .createUserWithEmailAndPassword(
             email: registerData.email, password: registerData.password)
         .catchError((err) => err);
     if (authResult.user != null && authResult.user.uid.isNotEmpty) {
+      registerData.id = authResult.user.uid;
+      _userController.add(registerData);
       await _fireStore
           .collection('users')
           .document(authResult.user.uid)
@@ -36,7 +41,9 @@ class FirebaseAuthProvider implements AuthApi {
               "uid": authResult.user.uid,
               "name": registerData.name,
               "gender": registerData.gender,
-              "email": registerData.email
+              "email": registerData.email,
+              "phone": registerData.phoneNumber,
+              "birthdate": registerData.birthDate,
             }),
           )
           .catchError((err) => err);
