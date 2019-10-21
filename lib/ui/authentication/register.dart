@@ -28,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       formState.save();
       var result = await rvm.registerUser();
       if (rvm.user != null && rvm.user.uid.isNotEmpty) {
-        Navigator.pushReplacementNamed(context, RoutePaths.FirstTime);
+        Navigator.pushReplacementNamed(context, RoutePaths.FirstTime, arguments: result);
       } else {
         Toast.show(
           result,

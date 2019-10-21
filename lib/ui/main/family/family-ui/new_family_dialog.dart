@@ -7,32 +7,31 @@ import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
-class RegisterFamilyScreen extends StatefulWidget {
-  final Function(FamilyData data) setFamily;
-  final String relation;
-
-  RegisterFamilyScreen({this.setFamily, this.relation});
-
-  _RegisterFamilyScreenState createState() => _RegisterFamilyScreenState();
+class NewFamilyDialog extends StatefulWidget {
+  @override
+  _NewFamilyDialogState createState() => _NewFamilyDialogState();
 }
 
-class _RegisterFamilyScreenState extends State<RegisterFamilyScreen> {
+class _NewFamilyDialogState extends State<NewFamilyDialog> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _dateFormat = 'dd MM yyyy';
   DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
 
+  void onPhoneNumberChanged(
+      String phoneNumber, void Function(String value) setPhoneNumber) {
+    setPhoneNumber(phoneNumber);
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+
     return BaseWidget<FamilyRegisterViewModel>(
       model: FamilyRegisterViewModel(),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
-          iconTheme: IconThemeData(
-            color: ColorPalette.oceanGreenColor,
-          ),
+          title: Text('Tambah Ahli'),
+          centerTitle: true,
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
@@ -42,13 +41,6 @@ class _RegisterFamilyScreenState extends State<RegisterFamilyScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    'Daftar Ahli Keluarga',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Container(
@@ -68,14 +60,14 @@ class _RegisterFamilyScreenState extends State<RegisterFamilyScreen> {
                               ),
                             ),
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(10.0, 15.0, 25.0, 15.0),
+                              padding: const EdgeInsets.fromLTRB(
+                                  10.0, 15.0, 25.0, 15.0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text('Hubungan'),
-                                  Text(widget.relation),
+                                  Text('Adik Beradik'),
                                 ],
                               ),
                             ),
@@ -129,8 +121,7 @@ class _RegisterFamilyScreenState extends State<RegisterFamilyScreen> {
                             ),
                           ),
                           InternationalPhoneNumberInput.withCustomDecoration(
-                            onInputChanged: (value) =>
-                                model.setPhoneNumber(value),
+                            onInputChanged: model.setPhoneNumber,
                             initialCountry2LetterCode: 'MY',
                             inputDecoration: InputDecoration(
                               hintText: 'Telefon',
@@ -206,7 +197,7 @@ class _RegisterFamilyScreenState extends State<RegisterFamilyScreen> {
                               ),
                             ),
                           ),
-                          widget.relation == 'Adik Beradik' ? Row(
+                          Row(
                             children: <Widget>[
                               Flexible(
                                 child: RadioListTile(
@@ -226,7 +217,7 @@ class _RegisterFamilyScreenState extends State<RegisterFamilyScreen> {
                                 ),
                               ),
                             ],
-                          ) : Container(),
+                          ),
                         ],
                       ),
                     ),
@@ -240,10 +231,16 @@ class _RegisterFamilyScreenState extends State<RegisterFamilyScreen> {
                         onPressed: () {
                           var formState = _formKey.currentState;
                           if (formState.validate()) {
-                            print('Validated');
                             formState.save();
-                            widget.setFamily(new FamilyData(name: model.name, phoneNumber: model.phoneNumber, birthDate: model.birthDate, relation: widget.relation, gender: model.gender));
-                            Navigator.pop(context);
+                            Navigator.of(context).pop(
+                              new FamilyData(
+                                name: model.name,
+                                phoneNumber: model.phoneNumber,
+                                birthDate: model.birthDate,
+                                relation: 'Adik Beradik',
+                                gender: model.gender,
+                              ),
+                            );
                           }
                         },
                         child: Text(

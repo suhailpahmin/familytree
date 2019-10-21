@@ -12,7 +12,8 @@ class Router {
       case RoutePaths.Home:
         return MaterialPageRoute(builder: (context) => HomeScreen());
       case RoutePaths.FirstTime:
-        return MaterialPageRoute(builder: (context) => FirstTimeScreen());
+        String userID = settings.arguments;
+        return MaterialPageRoute(builder: (context) => FirstTimeScreen(userID: userID));
       case RoutePaths.Login:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case RoutePaths.Root:

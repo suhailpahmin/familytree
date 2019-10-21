@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:familytree/core/constants/app_constants.dart';
+import 'package:familytree/core/models/pictory/pictory_model.dart';
 import 'package:familytree/core/models/pictory/pictorydata_model.dart';
 import 'package:familytree/core/viewmodels/views/pictories_view_model.dart';
 import 'package:familytree/ui/helper/base_widget.dart';
-import 'package:familytree/ui/helper/loading_overlay.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
@@ -100,6 +100,37 @@ class _PictoriesScreenState extends State<PictoriesScreen> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    List<Pictory> pictories = [
+      Pictory(
+        image:
+            'https://content.active.com/Assets/Active.com+Content+Site+Digital+Assets/Outdoors/Articles/Family+Reunion+Games/Carousel.jpg',
+        caption: 'Hari bersama atuk dan nenek',
+        date: '15 October 2001',
+      ),
+      Pictory(
+        image:
+            'https://www.weekendnotes.com/im/000/04/australia-day-family-friendly-events-festivals-act1.jpg',
+        caption: 'Hari Keluarga',
+        date: '25 Mei 2003',
+      ),
+      Pictory(
+        image:
+            'https://res.cloudinary.com/sagacity/image/upload/c_crop,h_640,w_960,x_0,y_0/c_limit,dpr_auto,f_auto,fl_lossy,q_80,w_1080/unnamed_zabwpv.jpg',
+        caption: 'Hari Reunion Keluarga',
+        date: '30 June 2003',
+      ),
+      Pictory(
+        image:
+            'https://s31606.pcdn.co/wp-content/uploads/2018/05/thanksgiving-with-family-picture-id842793126.jpg',
+        caption: 'Melawat Kampung',
+        date: '18 August 2004',
+      ),
+      Pictory(
+        image: 'https://selangorkini.my/wp-content/uploads/2019/06/raya.jpg',
+        caption: 'Hari Raya Aidilfitri',
+        date: '1 June 2005',
+      ),
+    ];
 
     return BaseWidget<PictoriesViewModel>(
       model: PictoriesViewModel(
@@ -107,110 +138,62 @@ class _PictoriesScreenState extends State<PictoriesScreen> {
         firestore: Firestore.instance,
       ),
       onModelReady: (model) => model.initializeModel(),
-      builder: (context, model, child) {
-        pvm = model;
-        return Stack(
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40.0,
-                  vertical: 80.0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Pictories',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25.0,
+      builder: (context, model, child) => Stack(
+        children: <Widget>[
+          ListView.builder(
+            itemCount: 5,
+            itemBuilder: (context, index) => Card(
+              child: Column(
+                children: <Widget>[
+                  Image.network(
+                    pictories[index].image,
+                    fit: BoxFit.cover,
+                    width: screenSize.width,
+                    height: screenSize.height * 0.2,
+                  ),
+                  Container(
+                    width: screenSize.width,
+                    height: screenSize.height * 0.1,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 15.0,
                       ),
-                    ),
-                    model.hasFamily != null && model.hasFamily
-                        ? model.pictories.length > 0
-                            ? Container(
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: model.pictories.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) =>
-                                          ListTile(
-                                    title: Row(
-                                      children: <Widget>[
-                                        Text(
-                                          model.pictories[index].postedBy,
-                                          style: TextStyle(
-                                            fontSize: screenSize.height * 0.022,
-                                              color: ColorPalette.blueSapphireColor,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 10.0),
-                                          child: Text(
-                                            model.pictories[index].createdOn,
-                                            style: TextStyle(
-                                              fontSize:
-                                                  screenSize.height * 0.02,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    subtitle: Text(
-                                      model.pictories[index].caption,
-                                      style: TextStyle(
-                                        fontSize: screenSize.height * 0.025,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : Container()
-                        : Expanded(
-                            child: Container(
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 25.0),
-                                      child: Text(
-                                        'Masuk di dalam family untuk memulakan pictories',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          color: ColorPalette.keppelColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            pictories[index].caption,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                  ],
-                ),
+                          Text(
+                            pictories[index].date,
+                            style: TextStyle(
+                              color: Colors.grey[500],
+                              fontWeight: FontWeight.w400,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            model.hasFamily != null && model.hasFamily
-                ? Positioned(
-                    top: screenSize.height * 0.8,
-                    right: screenSize.width * 0.07,
-                    child: FloatingActionButton(
-                      onPressed: newPictory,
-                      child: Icon(Icons.edit),
-                    ),
-                  )
-                : Container(),
-            model.busy ? LoadingOverlay() : Container(),
-          ],
-        );
-      },
+          ),
+          Positioned(
+            top: screenSize.height * 0.78,
+            right: screenSize.width * 0.1,
+            child: FloatingActionButton(
+              onPressed: newPictory,
+              child: Icon(Icons.edit),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

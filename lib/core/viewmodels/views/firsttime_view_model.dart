@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:familytree/core/models/family/familydata_model.dart';
 import 'package:familytree/core/viewmodels/base_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class FirstTimeViewModel extends BaseModel {
   Firestore _firestore;
-  FirebaseAuth _fireAuth;
   List<FamilyData> _siblings = new List<FamilyData>();
   List<FamilyData> get siblings => _siblings;
   FamilyData _mother;
@@ -24,19 +22,15 @@ class FirstTimeViewModel extends BaseModel {
   String _gender = "Lelaki";
   String get gender => _gender;
 
-  FirstTimeViewModel({Firestore firestore, FirebaseAuth fireAuth}) {
-    _firestore = firestore;
-    _fireAuth = fireAuth;
-  }
+  FirstTimeViewModel({Firestore firestore}) : _firestore = firestore;
 
-  Future<bool> registerFamily() async {
+  Future<bool> registerFamily(String userID) async {
     setBusy(true);
-    var user = await _fireAuth.currentUser();
     var result = await _firestore.collection('family').add({
-      'father': _father,
-      'mother': _mother,
-      'initiator': 'test',
-      'siblings': _siblings
+      'father': _father.toJson(),
+      'mother': _mother.toJson(),
+      'initiator': userID,
+      'siblings': familiesToJson(siblings)
     });
     setBusy(false);
     if (result.documentID != null) {

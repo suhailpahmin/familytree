@@ -1,11 +1,9 @@
+import 'package:familytree/core/models/family/familydata_model.dart';
+
 class FamilyModel {
-  List<String> members;
-  DateTime createdOn;
+  FamilyData mother;
+  FamilyData father;
+  List<FamilyData> siblings;
 
-  FamilyModel({this.members, this.createdOn});
-
-  factory FamilyModel.fromJson(Map<String, dynamic> json) => new FamilyModel(
-        members: List<String>.from(json['members'].map((x) => x)),
-        createdOn: json['createdOn'].toDate(),
-      );
+  FamilyModel({this.mother, this.father, this.siblings});
 }

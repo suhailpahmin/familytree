@@ -7,7 +7,8 @@ import 'package:familytree/ui/main/registerfamily.dart';
 import 'package:flutter/material.dart';
 
 class FirstTimeScreen extends StatefulWidget {
-  FirstTimeScreen({Key key}) : super(key: key);
+  final String userID;
+  FirstTimeScreen({this.userID});
 
   _FirstTimeScreenState createState() => _FirstTimeScreenState();
 }
@@ -172,7 +173,7 @@ class _FirstTimeScreenState extends State<FirstTimeScreen> {
                           child: RaisedButton(
                             color: ColorPalette.blueSapphireColor,
                             onPressed: () async {
-                              var result = await model.registerFamily();
+                              var result = await model.registerFamily(widget.userID);
                               if (result) {
                                 return Navigator.pushNamed(
                                     context, RoutePaths.Home);

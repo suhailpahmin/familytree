@@ -12,8 +12,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final List<Widget> _children = [
-    PictoriesScreen(),
     FamilyScreen(),
+    PictoriesScreen(),
     ProfileScreen(),
   ];
 
@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Container(),
           ),
           BottomNavigationBarItem(
-            icon: new Icon(FontAwesomeIcons.tree),
+            icon: new Icon(Icons.image),
             title: Container(),
           ),
           BottomNavigationBarItem(

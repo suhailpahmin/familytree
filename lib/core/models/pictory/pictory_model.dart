@@ -1,20 +1,8 @@
-import 'package:intl/intl.dart';
-
 class Pictory {
+  String image;
   String caption;
-  String createdOn;
-  String postedBy;
-  String familyID;
+  String date;
 
-  Pictory({this.caption, this.createdOn, this.postedBy, this.familyID});
+  Pictory({this.image, this.caption, this.date});
 
-  factory Pictory.fromJson(Map<String, dynamic> json) {
-    var formatter = new DateFormat('MMM d');
-    return new Pictory(
-        caption: json['caption'],
-        createdOn: formatter.format(json['createdOn'].toDate()),
-        familyID: json['familyID'],
-        postedBy: json['postedBy'],
-      );
-  }
 }
