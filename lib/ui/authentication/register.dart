@@ -24,14 +24,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _onSignUp() async {
     var formState = _formKey.currentState;
     if (formState.validate()) {
-      print('Validated');
       formState.save();
-      var result = await rvm.registerUser();
-      if (rvm.user != null && rvm.user.uid.isNotEmpty) {
-        Navigator.pushReplacementNamed(context, RoutePaths.FirstTime, arguments: result);
-      } else {
+      try {
+        await rvm.registerUser().then((result) {
+          if (result.isNotEmpty) {
+            if (result == 'Has Family') {
+              Navigator.pushReplacementNamed(context, RoutePaths.Home);
+            } else if (result.contains('error')) {
+              Toast.show(
+                result,
+                context,
+                duration: Toast.LENGTH_LONG,
+                gravity: Toast.BOTTOM,
+              );
+            } else {
+              Navigator.pushReplacementNamed(context, RoutePaths.FirstTime,
+                  arguments: result);
+            }
+          }
+        });
+      } catch (err) {
         Toast.show(
-          result,
+          err,
           context,
           duration: Toast.LENGTH_LONG,
           gravity: Toast.BOTTOM,
@@ -73,7 +87,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         firebaseAuthProvider: new FirebaseAuthProvider(),
       ),
       builder: (context, model, child) {
-        // registerUser = model.registerUser;
         rvm = model;
         return Scaffold(
           appBar: AppBar(
@@ -104,7 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 20.0),
                           child: Container(
-                            height: screenSize.height * 0.6,
+                            height: screenSize.height,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
@@ -158,11 +171,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                                 InternationalPhoneNumberInput
                                     .withCustomDecoration(
-                                  onInputChanged: (value) =>
-                                      model.setPhoneNumber(value),
+                                  onInputChanged: model.setPhoneNumber,
+                                  onInputValidated: model.setValidNumber,
                                   initialCountry2LetterCode: 'MY',
                                   inputDecoration: InputDecoration(
-                                    hintText: 'Telefon',
+                                    hintText: 'Telefon Utama',
+                                    errorText: model.validNumber
+                                        ? null
+                                        : 'Nombor tidak sah',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(15.0),
+                                        bottomRight: Radius.circular(15.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                InternationalPhoneNumberInput
+                                    .withCustomDecoration(
+                                  onInputChanged: model.setSecondNumber,
+                                  initialCountry2LetterCode: 'MY',
+                                  inputDecoration: InputDecoration(
+                                    hintText: 'Telefon Kedua',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(15.0),
+                                        bottomRight: Radius.circular(15.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                InternationalPhoneNumberInput
+                                    .withCustomDecoration(
+                                  onInputChanged: model.setThirdNumber,
+                                  initialCountry2LetterCode: 'MY',
+                                  inputDecoration: InputDecoration(
+                                    hintText: 'Telefon Ketiga',
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(15.0),

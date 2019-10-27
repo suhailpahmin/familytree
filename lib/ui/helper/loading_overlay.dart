@@ -12,7 +12,7 @@ class LoadingOverlay extends StatelessWidget {
       height: screenSize.height,
       width: screenSize.width,
       child: SpinKitChasingDots(
-        color: Colors.green,
+        color: Colors.white,
         size: 50.0,
       ),
     );

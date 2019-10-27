@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:familytree/core/constants/app_constants.dart';
 import 'package:familytree/core/models/pictory/pictory_model.dart';
-import 'package:familytree/core/models/pictory/pictorydata_model.dart';
 import 'package:familytree/core/viewmodels/views/pictories_view_model.dart';
 import 'package:familytree/ui/helper/base_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,8 +23,8 @@ class _PictoriesScreenState extends State<PictoriesScreen> {
   }
 
   void submitPictory() async {
-    await pvm.newPictory(
-        new PictoryData(caption: caption.text, createdOn: DateTime.now()));
+    // await pvm.newPictory(
+    //     new PictoryData(caption: caption.text, createdOn: DateTime.now()));
     caption.clear();
     Toast.show(
       'Pictory telah dihantar!',
@@ -137,7 +136,7 @@ class _PictoriesScreenState extends State<PictoriesScreen> {
         firebaseAuth: FirebaseAuth.instance,
         firestore: Firestore.instance,
       ),
-      onModelReady: (model) => model.initializeModel(),
+      // onModelReady: (model) => model.initializeModel(),
       builder: (context, model, child) => Stack(
         children: <Widget>[
           ListView.builder(

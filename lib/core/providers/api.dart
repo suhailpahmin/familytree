@@ -1,9 +1,9 @@
-import 'package:familytree/core/models/authentication/register_model.dart';
+import 'package:familytree/core/models/authentication/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthApi {
-  Future<FirebaseUser> login(String email, String password);
-  Future<FirebaseUser> register(User registerData);
+  Future<dynamic> login(String email, String password);
+  Future<String> register(User registerData);
   Future<FirebaseUser> getCurrentUser();
   Future signOut();
   Future<void> sendEmailVerification();

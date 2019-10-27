@@ -1,15 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:familytree/core/models/family/familydata_model.dart';
+import 'package:familytree/core/providers/firebase_auth.dart';
 import 'package:familytree/core/viewmodels/base_model.dart';
 
 class FirstTimeViewModel extends BaseModel {
-  Firestore _firestore;
   List<FamilyData> _siblings = new List<FamilyData>();
   List<FamilyData> get siblings => _siblings;
   FamilyData _mother;
   FamilyData get mother => _mother;
   FamilyData _father;
   FamilyData get father => _father;
+  FirebaseAuthProvider _firebaseAuthProvider;
 
   String _name = '';
   String get name => _name;
@@ -22,21 +22,20 @@ class FirstTimeViewModel extends BaseModel {
   String _gender = "Lelaki";
   String get gender => _gender;
 
-  FirstTimeViewModel({Firestore firestore}) : _firestore = firestore;
+  FirstTimeViewModel({FirebaseAuthProvider firebaseAuthProvider}) {
+    _firebaseAuthProvider = firebaseAuthProvider;
+  }
 
-  Future<bool> registerFamily(String userID) async {
-    setBusy(true);
-    var result = await _firestore.collection('family').add({
-      'father': _father.toJson(),
-      'mother': _mother.toJson(),
-      'initiator': userID,
-      'siblings': familiesToJson(siblings)
-    });
-    setBusy(false);
-    if (result.documentID != null) {
-      return true;
-    } else {
-      return false;
+  Future<String> registerFamily(String userID) async {
+    try {
+      setBusy(true);
+      var registerResult = await _firebaseAuthProvider.registerFamily(
+          userID, father, mother, siblings);
+      setBusy(false);
+      return registerResult;
+    } catch (err) {
+      setBusy(false);
+      return err.message;
     }
   }
 

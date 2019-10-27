@@ -20,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   RegExp emailRegExp = new RegExp(
       r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
 
-  void _authenticate(Function loginUser) async {
+  void _authenticate(Function loginUser, String error) async {
     var keyState = _formKey.currentState;
     if (keyState.validate()) {
       keyState.save();
@@ -33,10 +33,10 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       } else {
         Toast.show(
-          'Authentication failed',
+          error,
           context,
           duration: Toast.LENGTH_LONG,
-          gravity: Toast.BOTTOM,
+          gravity: Toast.TOP,
         );
       }
     }
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: screenSize.height * 0.05,
                           child: RaisedButton(
                             color: ColorPalette.blueSapphireColor,
-                            onPressed: () => _authenticate(model.loginUser),
+                            onPressed: () => _authenticate(model.loginUser, model.error),
                             child: Text(
                               'Log Masuk',
                               style: TextStyle(

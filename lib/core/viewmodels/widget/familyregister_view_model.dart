@@ -5,6 +5,8 @@ class FamilyRegisterViewModel extends BaseModel {
   String get name => _name;
   String _phoneNumber = '';
   String get phoneNumber => _phoneNumber;
+  bool _validNumber = true;
+  bool get validNumber => _validNumber;
   DateTime _birthDate = DateTime.now();
   DateTime get birthDate => _birthDate;
   int _genderIndex = 0;
@@ -25,6 +27,13 @@ class FamilyRegisterViewModel extends BaseModel {
   void setName(String value) {
     _name = value;
     notifyListeners();
+  }
+
+  void setValidNumber(bool value) {
+    if (_phoneNumber.length > 0) {
+      _validNumber = value;
+      notifyListeners();
+    }
   }
 
   void setGender(int value) {

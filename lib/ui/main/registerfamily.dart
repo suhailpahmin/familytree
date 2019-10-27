@@ -68,8 +68,8 @@ class _RegisterFamilyScreenState extends State<RegisterFamilyScreen> {
                               ),
                             ),
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(10.0, 15.0, 25.0, 15.0),
+                              padding: const EdgeInsets.fromLTRB(
+                                  10.0, 15.0, 25.0, 15.0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -129,11 +129,12 @@ class _RegisterFamilyScreenState extends State<RegisterFamilyScreen> {
                             ),
                           ),
                           InternationalPhoneNumberInput.withCustomDecoration(
-                            onInputChanged: (value) =>
-                                model.setPhoneNumber(value),
+                            onInputChanged: model.setPhoneNumber,
+                            onInputValidated: (value) => model.setValidNumber(value),
                             initialCountry2LetterCode: 'MY',
                             inputDecoration: InputDecoration(
                               hintText: 'Telefon',
+                              errorText: model.validNumber ? null : 'Nombor tidak sah',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(15.0),
@@ -206,27 +207,31 @@ class _RegisterFamilyScreenState extends State<RegisterFamilyScreen> {
                               ),
                             ),
                           ),
-                          widget.relation == 'Adik Beradik' ? Row(
-                            children: <Widget>[
-                              Flexible(
-                                child: RadioListTile(
-                                  activeColor: ColorPalette.keppelColor,
-                                  groupValue: model.genderIndex,
-                                  title: Text('Lelaki'),
-                                  value: 0,
-                                  onChanged: (value) => model.setGender(value),
-                                ),
-                              ),
-                              Flexible(
-                                child: RadioListTile(
-                                  groupValue: model.genderIndex,
-                                  title: Text('Wanita'),
-                                  value: 1,
-                                  onChanged: (value) => model.setGender(value),
-                                ),
-                              ),
-                            ],
-                          ) : Container(),
+                          widget.relation == 'Adik Beradik'
+                              ? Row(
+                                  children: <Widget>[
+                                    Flexible(
+                                      child: RadioListTile(
+                                        activeColor: ColorPalette.keppelColor,
+                                        groupValue: model.genderIndex,
+                                        title: Text('Lelaki'),
+                                        value: 0,
+                                        onChanged: (value) =>
+                                            model.setGender(value),
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child: RadioListTile(
+                                        groupValue: model.genderIndex,
+                                        title: Text('Wanita'),
+                                        value: 1,
+                                        onChanged: (value) =>
+                                            model.setGender(value),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
                         ],
                       ),
                     ),
@@ -240,9 +245,13 @@ class _RegisterFamilyScreenState extends State<RegisterFamilyScreen> {
                         onPressed: () {
                           var formState = _formKey.currentState;
                           if (formState.validate()) {
-                            print('Validated');
                             formState.save();
-                            widget.setFamily(new FamilyData(name: model.name, phoneNumber: model.phoneNumber, birthDate: model.birthDate, relation: widget.relation, gender: model.gender));
+                            widget.setFamily(new FamilyData(
+                              name: model.name,
+                              phoneNumber: model.phoneNumber,
+                              birthDate: model.birthDate,
+                              gender: model.gender
+                            ));
                             Navigator.pop(context);
                           }
                         },

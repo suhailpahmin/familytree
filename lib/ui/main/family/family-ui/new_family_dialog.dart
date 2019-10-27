@@ -17,11 +17,6 @@ class _NewFamilyDialogState extends State<NewFamilyDialog> {
   String _dateFormat = 'dd MM yyyy';
   DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
 
-  void onPhoneNumberChanged(
-      String phoneNumber, void Function(String value) setPhoneNumber) {
-    setPhoneNumber(phoneNumber);
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -237,7 +232,6 @@ class _NewFamilyDialogState extends State<NewFamilyDialog> {
                                 name: model.name,
                                 phoneNumber: model.phoneNumber,
                                 birthDate: model.birthDate,
-                                relation: 'Adik Beradik',
                                 gender: model.gender,
                               ),
                             );

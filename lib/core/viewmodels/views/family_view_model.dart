@@ -11,6 +11,8 @@ class FamilyViewModel extends BaseModel {
   FamilyModel get familyResult => _familyResult;
   FamilyData _selfData;
   FamilyData get selfData => _selfData;
+  String _familyID = '';
+  String get familyID => _familyID;
 
   FamilyViewModel({Firestore firestore, FirebaseAuth fireAuth}) {
     _firestore = firestore;
@@ -19,159 +21,93 @@ class FamilyViewModel extends BaseModel {
 
   void addFamilyMember(FamilyData newMember) async {
     setBusy(true);
-    FirebaseUser user = await _fireAuth.currentUser();
     List<FamilyData> siblingList = [newMember];
-    var documentID = await _firestore
-        .collection('family')
-        .where('initiator', isEqualTo: user.uid)
-        .getDocuments()
-        .then((QuerySnapshot snapshot) => snapshot.documents.first.documentID);
-    if (documentID.isNotEmpty) {
-      await _firestore
-          .collection('family')
-          .document(documentID)
-          .updateData({'siblings': FieldValue.arrayUnion(familiesToJson(siblingList))});
-      _familyResult.siblings.add(newMember);
-      _familyResult.siblings.sort((a, b) => a.birthDate.compareTo(b.birthDate));
-      _familyResult.siblings.asMap().forEach((index, s) => {
-            if (s.birthDate.compareTo(_selfData.birthDate) < 0)
-              {
-                if (s.gender == 'Lelaki')
-                  {_familyResult.siblings[index].relation = 'Abang'}
-                else if (s.gender == 'Wanita')
-                  {_familyResult.siblings[index].relation = 'Kakak'}
-              }
-            else if (s.birthDate.compareTo(_selfData.birthDate) > 0)
-              {
-                if (s.gender == 'Lelaki')
-                  {_familyResult.siblings[index].relation = 'Adik Lelaki'}
-                else if (s.gender == 'Wanita')
-                  {_familyResult.siblings[index].relation = 'Adik Perempuan'}
-              }
-          });
-      notifyListeners();
-    }
+    await _firestore.collection('family').document(_familyID).updateData(
+          ({
+            'siblings': FieldValue.arrayUnion(
+              familiesToJson(siblingList),
+            ),
+          }),
+        );
+    _familyResult.siblings.add(newMember);
+    notifyListeners();
     setBusy(false);
   }
-
-  // void registerFamily() async {
-  //   setBusy(true);
-  //   final id = shortid.generate();
-  //   print(id);
-  //   FirebaseUser user = await _fireAuth.currentUser();
-  //   await _firestore.collection('family').document(id).setData({
-  //     'members': [user.uid],
-  //     'createdOn': DateTime.now(),
-  //   });
-  //   setBusy(false);
-  // }
-
-  // void cancelSearch() {
-  //   _familyResult = null;
-  //   _familyMembers = new List<String>();
-  //   _familyID = null;
-  //   notifyListeners();
-  // }
-
-  // void joinFamily() async {
-  //   setBusy(true);
-  //   FirebaseUser user = await _fireAuth.currentUser();
-  //   await _firestore.collection('family').document(_familyID).updateData({"members": FieldValue.arrayUnion([user.uid])});
-  //   _familyResult = null;
-  //   notifyListeners();
-  //   setBusy(false);
-  // }
 
   Future getFamily() async {
     setBusy(true);
     FirebaseUser user = await _fireAuth.currentUser();
     _familyResult = new FamilyModel();
     await _firestore
-        .collection('family')
-        .where('initiator', isEqualTo: user.uid)
+        .collection('userfamily')
+        .where('userID', isEqualTo: user.uid)
         .getDocuments()
         .then((QuerySnapshot snapshot) async {
-      if (snapshot.documents != null && snapshot.documents.length > 0) {
-        var fatherData = new Map<String, dynamic>.from(
-            snapshot.documents.first.data['father']);
-        var motherData = new Map<String, dynamic>.from(
-            snapshot.documents.first.data['mother']);
-        var siblingsData =
-            new List<dynamic>.from(snapshot.documents.first.data['siblings']);
-        _familyResult.father = familyFromJson(fatherData);
-        _familyResult.mother = familyFromJson(motherData);
-        _familyResult.siblings = familiesFromJson(siblingsData);
-        await _firestore
-            .collection('users')
-            .document(user.uid)
-            .get()
-            .then((DocumentSnapshot value) {
-          _selfData = new FamilyData(
-            name: value.data['name'],
-            phoneNumber: value.data['phone'],
-            birthDate: value.data['birthdate'].toDate(),
-            relation: 'Anda',
-            gender: 'Lelaki',
-          );
-          _familyResult.siblings.add(_selfData);
-          DateTime userBirthdate = value.data['birthdate'].toDate();
-          _familyResult.siblings
-              .sort((a, b) => a.birthDate.compareTo(b.birthDate));
-          _familyResult.siblings.asMap().forEach((index, s) => {
-                if (s.birthDate.compareTo(userBirthdate) < 0)
-                  {
-                    if (s.gender == 'Lelaki')
-                      {_familyResult.siblings[index].relation = 'Abang'}
-                    else if (s.gender == 'Wanita')
-                      {_familyResult.siblings[index].relation = 'Kakak'}
-                  }
-                else if (s.birthDate.compareTo(userBirthdate) > 0)
-                  {
-                    if (s.gender == 'Lelaki')
-                      {_familyResult.siblings[index].relation = 'Adik Lelaki'}
-                    else if (s.gender == 'Wanita')
-                      {
-                        _familyResult.siblings[index].relation =
-                            'Adik Perempuan'
-                      }
-                  }
-              });
-        });
-        notifyListeners();
-        setBusy(false);
-      } else {
-        setBusy(false);
-      }
-    });
-    setBusy(false);
-    return null;
-  }
+      await _firestore
+          .collection('family')
+          .document(snapshot.documents.first.data['familyID'])
+          .get()
+          .then((DocumentSnapshot doc) async {
+        if (doc.exists != null && doc.data != null) {
+          _familyID = doc.documentID;
+          var fatherData = new Map<String, dynamic>.from(doc.data['father']);
+          var motherData = new Map<String, dynamic>.from(doc.data['mother']);
+          var siblingsData = new List<dynamic>.from(doc.data['siblings']);
+          _familyResult.father = familyFromJson(fatherData);
+          _familyResult.mother = familyFromJson(motherData);
+          _familyResult.siblings = familiesFromJson(siblingsData);
 
-  // void getFamily() async {
-  //   setBusy(true);
-  //   FirebaseUser user = await _fireAuth.currentUser();
-  //   _familyMembers = new List<String>();
-  //   await _firestore
-  //       .collection('family')
-  //       .where('members', arrayContains: user.uid)
-  //       .getDocuments()
-  //       .then((QuerySnapshot snapshot) {
-  //     if (snapshot.documents != null && snapshot.documents.length > 0) {
-  //       _familyID = snapshot.documents.first.documentID;
-  //       snapshot.documents.first.data['members'].forEach((member) async {
-  //         await _firestore
-  //             .collection('users')
-  //             .where('uid', isEqualTo: member)
-  //             .getDocuments()
-  //             .then((QuerySnapshot snapshot) {
-  //           _familyMembers.add(snapshot.documents.first.data['name']);
-  //         });
-  //         notifyListeners();
-  //         setBusy(false);
-  //       });
-  //     } else {
-  //       setBusy(false);
-  //     }
-  //   });
-  // }
+          if (_familyResult.father.id != user.uid &&
+              _familyResult.mother.id != user.uid) {
+            _familyResult.father.relation = 'Bapa';
+            _familyResult.mother.relation = 'Ibu';
+            _familyResult.siblings
+                .sort((a, b) => a.birthDate.compareTo(b.birthDate));
+            DateTime userBirthdate = _familyResult.siblings
+                .where((s) => s.id == user.uid)
+                .first
+                .birthDate;
+            _familyResult.siblings.asMap().forEach((index, s) => {
+                  if (s.id == user.uid)
+                    {
+                      _familyResult.siblings[index].relation = 'Anda',
+                    }
+                  else if (s.birthDate.compareTo(userBirthdate) < 0)
+                    {
+                      if (s.gender == 'Lelaki')
+                        {_familyResult.siblings[index].relation = 'Abang'}
+                      else if (s.gender == 'Wanita')
+                        {_familyResult.siblings[index].relation = 'Kakak'}
+                    }
+                  else if (s.birthDate.compareTo(userBirthdate) > 0)
+                    {
+                      if (s.gender == 'Lelaki')
+                        {_familyResult.siblings[index].relation = 'Adik Lelaki'}
+                      else if (s.gender == 'Wanita')
+                        {
+                          _familyResult.siblings[index].relation =
+                              'Adik Perempuan'
+                        }
+                    }
+                });
+          } else {
+            if (_familyResult.mother.id == user.uid) {
+              _familyResult.mother.relation = 'Anda';
+              _familyResult.father.relation = 'Suami';
+            } else if (_familyResult.father.id == user.uid) {
+              _familyResult.father.relation = 'Anda';
+              _familyResult.mother.relation = 'Isteri';
+            }
+            _familyResult.siblings
+                .sort((a, b) => a.birthDate.compareTo(b.birthDate));
+            _familyResult.siblings.forEach((s) => s.relation = 'Anak');
+          }
+          notifyListeners();
+          setBusy(false);
+        } else {
+          setBusy(false);
+        }
+      });
+    });
+  }
 }

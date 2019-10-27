@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "1067667047758",
-    "firebase_url": "https://familytree-db6cc.firebaseio.com",
-    "project_id": "familytree-db6cc",
-    "storage_bucket": "familytree-db6cc.appspot.com"
+    "project_number": "916650636810",
+    "firebase_url": "https://waris-510eb.firebaseio.com",
+    "project_id": "waris-510eb",
+    "storage_bucket": "waris-510eb.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1067667047758:android:0472796c030d05e0168a1f",
+        "mobilesdk_app_id": "1:916650636810:android:c4e604d6a4c25c16a511f3",
         "android_client_info": {
           "package_name": "com.proclive.familytree"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1067667047758-2k8e45mqokcm9ej22kgakjfgot382rm3.apps.googleusercontent.com",
+          "client_id": "916650636810-jjpd1qfpuf14ahvil9la5h4b4jv0r012.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCymXlmhfyM4vEFS8g2di1Vxz9HpktmgvY"
+          "current_key": "AIzaSyB0rVRAKpIHO1ogUYjfTm21p-D9XZNJ-E8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1067667047758-2k8e45mqokcm9ej22kgakjfgot382rm3.apps.googleusercontent.com",
+              "client_id": "916650636810-jjpd1qfpuf14ahvil9la5h4b4jv0r012.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
