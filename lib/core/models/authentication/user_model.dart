@@ -16,6 +16,7 @@ class User {
   String currentState;
   String secondNumber;
   String thirdNumber;
+  String image;
 
   User({
     this.email,
@@ -29,7 +30,8 @@ class User {
     this.currentAddress,
     this.currentState,
     this.secondNumber,
-    this.thirdNumber
+    this.thirdNumber,
+    this.image,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => new User(
@@ -46,6 +48,7 @@ class User {
             json['currentState'] != null ? json['currentState'] : null,
         secondNumber: json['secondNumber'] != null ? json['secondNumber'] : null,
         thirdNumber: json['thirdNumber'] != null ? json['thirdNumber'] : null,
+        image: json['image'] != null ? json['image'] : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -60,5 +63,6 @@ class User {
         'currentState': currentState != null ? currentState : null,
         'secondNumber': secondNumber != null ? secondNumber : null,
         'thirdNumber': thirdNumber != null ? thirdNumber : null,
+        'image': image != null ? image : null,
       };
 }

@@ -1,5 +1,4 @@
 import 'package:familytree/core/constants/app_constants.dart';
-import 'package:familytree/core/providers/firebase_auth.dart';
 import 'package:familytree/core/viewmodels/views/register_view_model.dart';
 import 'package:familytree/ui/helper/base_widget.dart';
 import 'package:familytree/ui/helper/loading_overlay.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -25,31 +25,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     var formState = _formKey.currentState;
     if (formState.validate()) {
       formState.save();
-      try {
-        await rvm.registerUser().then((result) {
-          if (result.isNotEmpty) {
-            if (result == 'Has Family') {
-              Navigator.pushReplacementNamed(context, RoutePaths.Home);
-            } else if (result.contains('error')) {
-              Toast.show(
-                result,
-                context,
-                duration: Toast.LENGTH_LONG,
-                gravity: Toast.BOTTOM,
-              );
-            } else {
-              Navigator.pushReplacementNamed(context, RoutePaths.FirstTime,
-                  arguments: result);
-            }
-          }
-        });
-      } catch (err) {
-        Toast.show(
-          err,
-          context,
-          duration: Toast.LENGTH_LONG,
-          gravity: Toast.BOTTOM,
-        );
+      var userResult = await rvm.registerUser();
+      if (userResult.isNotEmpty) {
+        if (userResult == 'Has Family') {
+          Navigator.pushReplacementNamed(context, RoutePaths.Home);
+        } else if (userResult.contains('error')) {
+          Toast.show(
+            userResult,
+            context,
+            duration: Toast.LENGTH_LONG,
+            gravity: Toast.BOTTOM,
+          );
+        } else {
+          Toast.show(userResult, context,
+              duration: Toast.LENGTH_LONG, gravity: Toast.TOP);
+          Navigator.pushReplacementNamed(context, RoutePaths.FirstTime,
+              arguments: userResult);
+        }
       }
     }
   }
@@ -84,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final screenSize = MediaQuery.of(context).size;
     return BaseWidget<RegisterViewModel>(
       model: RegisterViewModel(
-        firebaseAuthProvider: new FirebaseAuthProvider(),
+        firebaseAuthProvider: Provider.of(context),
       ),
       builder: (context, model, child) {
         rvm = model;

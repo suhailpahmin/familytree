@@ -24,7 +24,9 @@ class FirebaseAuthProvider implements AuthApi {
 
   @override
   Future<FirebaseUser> getCurrentUser() async {
-    _sharedPreferences = await _prefs;
+    if (_sharedPreferences == null) {
+      _sharedPreferences = await _prefs;
+    }
     FirebaseUser user = await _fireAuth.currentUser();
     var getUser = SharedPreferencesHelper.getUser(_sharedPreferences);
     if (getUser != null) {
@@ -64,7 +66,9 @@ class FirebaseAuthProvider implements AuthApi {
   @override
   Future<dynamic> login(String email, String password) async {
     try {
-      _sharedPreferences = await _prefs;
+      if (_sharedPreferences == null) {
+        _sharedPreferences = await _prefs;
+      }
       AuthResult authResult = await _fireAuth.signInWithEmailAndPassword(
           email: email, password: password);
       if (authResult.user != null) {
@@ -150,132 +154,127 @@ class FirebaseAuthProvider implements AuthApi {
 
   @override
   Future<String> register(User registerData) async {
-    try {
-      var user = await createUser(registerData);
+    var user = await createUser(registerData);
 
-      if (!user.contains('Failed')) {
-        registerData.id = user;
-        var searchMother = await _fireStore
+    if (!user.contains('Failed')) {
+      registerData.id = user;
+      var searchMother = await _fireStore
+          .collection('family')
+          .where('mother.phoneNumber', isEqualTo: registerData.phoneNumber)
+          .limit(1)
+          .getDocuments();
+      if (searchMother.documents != null && searchMother.documents.length > 0) {
+        var familyRef = _fireStore
             .collection('family')
-            .where('mother.phoneNumber', isEqualTo: registerData.phoneNumber)
-            .limit(1)
-            .getDocuments();
-        if (searchMother.documents != null &&
-            searchMother.documents.length > 0) {
-          var familyRef = _fireStore
-              .collection('family')
-              .document(searchMother.documents.first.documentID);
-          await familyRef.updateData({'mother': registerData.toJson()});
-          await _fireStore
-              .collection('userfamily')
-              .document()
-              .setData({'userID': user, 'familyID': familyRef.documentID});
-          return 'Has Family';
-        }
-
-        var searchFather = await _fireStore
-            .collection('family')
-            .where('father.phoneNumber', isEqualTo: registerData.phoneNumber)
-            .limit(1)
-            .getDocuments();
-        if (searchFather.documents != null &&
-            searchFather.documents.length > 0) {
-          var familyRef = _fireStore
-              .collection('family')
-              .document(searchFather.documents.first.documentID);
-          await familyRef.updateData({'father': registerData.toJson()});
-          await _fireStore
-              .collection('userfamily')
-              .document()
-              .setData({'userID': user, 'familyID': familyRef.documentID});
-          return 'Has Family';
-        }
-
-        var searchSiblings = await _fireStore
-            .collection('family')
-            .where('siblings', arrayContains: {
-              'birthDate': registerData.birthDate,
-              'gender': registerData.gender,
-              'id': null,
-              'name': registerData.name,
-              'phoneNumber': registerData.phoneNumber,
-              'secondNumber': null,
-              'thirdNumber': null,
-            })
-            .limit(1)
-            .getDocuments();
-        if (searchSiblings.documents != null &&
-            searchSiblings.documents.length > 0) {
-          var siblingsData = new List<dynamic>.from(
-              searchSiblings.documents.first.data['siblings']);
-          var userData = new FamilyData(
-            name: registerData.name,
-            id: registerData.id,
-            birthDate: registerData.birthDate,
-            gender: registerData.gender,
-            phoneNumber: registerData.phoneNumber,
-            secondNumber: registerData.secondNumber,
-            thirdNumber: registerData.thirdNumber,
-          );
-          List<FamilyData> siblings = familiesFromJson(siblingsData);
-          siblings.asMap().forEach((index, s) {
-            if (s.phoneNumber == registerData.phoneNumber) {
-              siblings[index] = userData;
-            }
-          });
-          await _fireStore
-              .collection('family')
-              .document(searchSiblings.documents.first.documentID)
-              .updateData({'siblings': familiesToJson(siblings)});
-          await _fireStore.collection('userfamily').document().setData({
-            'userID': user,
-            'familyID': searchSiblings.documents.first.documentID
-          });
-          return 'Has Family';
-        }
+            .document(searchMother.documents.first.documentID);
+        await familyRef.updateData({'mother': registerData.toJson()});
+        await _fireStore
+            .collection('userfamily')
+            .document()
+            .setData({'userID': user, 'familyID': familyRef.documentID});
+        return 'Has Family';
       }
-      return user;
-    } catch (err) {
-      return err.message;
+
+      var searchFather = await _fireStore
+          .collection('family')
+          .where('father.phoneNumber', isEqualTo: registerData.phoneNumber)
+          .limit(1)
+          .getDocuments();
+      if (searchFather.documents != null && searchFather.documents.length > 0) {
+        var familyRef = _fireStore
+            .collection('family')
+            .document(searchFather.documents.first.documentID);
+        await familyRef.updateData({'father': registerData.toJson()});
+        await _fireStore
+            .collection('userfamily')
+            .document()
+            .setData({'userID': user, 'familyID': familyRef.documentID});
+        return 'Has Family';
+      }
+
+      var searchSiblings = await _fireStore
+          .collection('family')
+          .where('siblings', arrayContains: {
+            'birthDate': registerData.birthDate,
+            'gender': registerData.gender,
+            'id': null,
+            'name': registerData.name,
+            'phoneNumber': registerData.phoneNumber,
+            'secondNumber': null,
+            'thirdNumber': null,
+          })
+          .limit(1)
+          .getDocuments();
+      if (searchSiblings.documents != null &&
+          searchSiblings.documents.length > 0) {
+        var siblingsData = new List<dynamic>.from(
+            searchSiblings.documents.first.data['siblings']);
+        var userData = new FamilyData(
+          name: registerData.name,
+          id: registerData.id,
+          birthDate: registerData.birthDate,
+          gender: registerData.gender,
+          phoneNumber: registerData.phoneNumber,
+          secondNumber: registerData.secondNumber,
+          thirdNumber: registerData.thirdNumber,
+        );
+        List<FamilyData> siblings = familiesFromJson(siblingsData);
+        siblings.asMap().forEach((index, s) {
+          if (s.phoneNumber == registerData.phoneNumber) {
+            siblings[index] = userData;
+          }
+        });
+        await _fireStore
+            .collection('family')
+            .document(searchSiblings.documents.first.documentID)
+            .updateData({'siblings': familiesToJson(siblings)});
+        await _fireStore.collection('userfamily').document().setData({
+          'userID': user,
+          'familyID': searchSiblings.documents.first.documentID
+        });
+        return 'Has Family';
+      }
     }
+    return user;
   }
 
   Future<String> createUser(User registerData) async {
-    _sharedPreferences = await _prefs;
-    try {
-      final FirebaseUser user = (await _fireAuth.createUserWithEmailAndPassword(
-              email: registerData.email, password: registerData.password))
-          .user;
+    if (_sharedPreferences == null) {
+      _sharedPreferences = await _prefs;
+    }
+    final FirebaseUser user = (await _fireAuth.createUserWithEmailAndPassword(
+      email: registerData.email,
+      password: registerData.password,
+    )).user;
 
-      if (user != null && user.uid.isNotEmpty) {
-        registerData.id = user.uid;
-        await _fireStore.collection('users').document(user.uid).setData(
-              ({
-                "id": user.uid,
-                "name": registerData.name,
-                "gender": registerData.gender,
-                "email": registerData.email,
-                "phone": registerData.phoneNumber,
-                "birthDate": registerData.birthDate,
-                "secondNumber": registerData.secondNumber,
-                "thirdNumber": registerData.thirdNumber,
-              }),
-            );
-        _userController.add(registerData);
-        String userString = jsonEncode(registerData);
-        SharedPreferencesHelper.logUser(_sharedPreferences, userString);
-        return registerData.id;
-      } else {
-        return 'Failed creating user';
-      }
-    } on PlatformException catch (err) {
-      return err.message;
+    if (user != null && user.uid.isNotEmpty) {
+      registerData.id = user.uid;
+      await _fireStore.collection('users').document(user.uid).setData(
+            ({
+              "id": user.uid,
+              "name": registerData.name,
+              "gender": registerData.gender,
+              "email": registerData.email,
+              "phone": registerData.phoneNumber,
+              "birthDate": registerData.birthDate,
+              "secondNumber": registerData.secondNumber,
+              "thirdNumber": registerData.thirdNumber,
+            }),
+          );
+      _userController.add(registerData);
+      String userString = jsonEncode(registerData);
+      SharedPreferencesHelper.logUser(_sharedPreferences, userString);
+      return registerData.id;
+    } else {
+      return 'Failed creating user';
     }
   }
 
   @override
   Future signOut() async {
-    _sharedPreferences = await _prefs;
+    if (_sharedPreferences == null) {
+      _sharedPreferences = await _prefs;
+    }
     SharedPreferencesHelper.logOutUser(_sharedPreferences);
     return _fireAuth.signOut();
   }

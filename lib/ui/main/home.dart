@@ -35,17 +35,25 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: TabBarView(
-        controller: tabController,
-        children: _children,
-      ),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
-        flexibleSpace: SafeArea(
-          child: TabBar(
+    final screenSize = MediaQuery.of(context).size;
+
+    return DefaultTabController(
+      length: _children.length,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: TabBarView(
+          controller: tabController,
+          children: _children,
+        ),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(
+            'WAREIH',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          bottom: TabBar(
             indicatorWeight: 2,
             indicatorColor: Colors.white,
             controller: tabController,
@@ -55,11 +63,27 @@ class _HomeScreenState extends State<HomeScreen>
                   Icons.home,
                   color: Colors.white,
                 ),
+                child: Text(
+                  'Home',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                    fontSize: screenSize.width * 0.03,
+                  ),
+                ),
               ),
               Tab(
                 icon: Icon(
                   Icons.image,
                   color: Colors.white,
+                ),
+                child: Text(
+                  'Pictories',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                    fontSize: screenSize.width * 0.03,
+                  ),
                 ),
               ),
               Tab(
@@ -67,11 +91,27 @@ class _HomeScreenState extends State<HomeScreen>
                   Icons.local_bar,
                   color: Colors.white,
                 ),
+                child: Text(
+                  'Lounge',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                    fontSize: screenSize.width * 0.03,
+                  ),
+                ),
               ),
               Tab(
                 icon: Icon(
                   Icons.attach_money,
                   color: Colors.white,
+                ),
+                child: Text(
+                  'Business',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                    fontSize: screenSize.width * 0.03,
+                  ),
                 ),
               ),
               Tab(
@@ -79,39 +119,19 @@ class _HomeScreenState extends State<HomeScreen>
                   Icons.person,
                   color: Colors.white,
                 ),
+                child: Text(
+                  'Profile',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                    fontSize: screenSize.width * 0.03,
+                  ),
+                ),
               ),
             ],
           ),
         ),
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   backgroundColor: Colors.transparent,
-      //   currentIndex: _currentIndex,
-      //   onTap: onTabTapped,
-      //   items: [
-      //     BottomNavigationBarItem(
-      //       icon: new Icon(
-      //         Icons.home,
-      //         color: ColorPalette.teaGreenColor,
-      //       ),
-      //       title: Container(),
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: new Icon(
-      //         Icons.image,
-      //         color: ColorPalette.teaGreenColor,
-      //       ),
-      //       title: Container(),
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(
-      //         FontAwesomeIcons.userAlt,
-      //         color: ColorPalette.teaGreenColor,
-      //       ),
-      //       title: Container(),
-      //     )
-      //   ],
-      // ),
     );
   }
 }

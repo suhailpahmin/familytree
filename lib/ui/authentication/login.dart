@@ -1,5 +1,4 @@
 import 'package:familytree/core/constants/app_constants.dart';
-import 'package:familytree/core/providers/firebase_auth.dart';
 import 'package:familytree/core/viewmodels/views/login_view_model.dart';
 import 'package:familytree/ui/authentication/login-ui/login_footer.dart';
 import 'package:familytree/ui/authentication/login-ui/login_form.dart';
@@ -8,6 +7,7 @@ import 'package:familytree/ui/helper/base_widget.dart';
 import 'package:familytree/ui/helper/loading_overlay.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final screenSize = MediaQuery.of(context).size;
 
     return BaseWidget<LoginViewModel>(
-      model: LoginViewModel(firebaseAuth: new FirebaseAuthProvider()),
+      model: LoginViewModel(firebaseAuth: Provider.of(context)),
       builder: (context, model, child) => Scaffold(
           body: Stack(
         children: <Widget>[

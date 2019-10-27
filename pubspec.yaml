@@ -3,7 +3,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -13,6 +13,7 @@ dependencies:
   firebase_core: ^0.4.0+9
   firebase_analytics: ^5.0.2
   firebase_auth: ^0.14.0+5
+  firebase_storage: ^3.0.6
   cloud_firestore: ^0.12.9+4
   flutter_spinkit: ^4.0.0
   intl_phone_number_input: ^0.1.0
@@ -22,6 +23,9 @@ dependencies:
   toast: ^0.1.5
   shortid: ^0.1.1
   shared_preferences: ^0.5.4+1
+  image_picker: ^0.6.1+4
+  image_cropper: ^1.1.0
+  path: ^1.6.4
   
 dev_dependencies:
   flutter_test:

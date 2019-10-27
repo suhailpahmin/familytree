@@ -24,8 +24,9 @@ class _FamilyScreenState extends State<FamilyScreen> {
     Future _openNewFamilyDialog(
         Function(FamilyData newMember) addFamilyMember) async {
       var route = MaterialPageRoute<FamilyData>(
-          builder: (BuildContext context) => new NewFamilyDialog(),
-          fullscreenDialog: true);
+        builder: (BuildContext context) => new NewFamilyDialog(),
+        fullscreenDialog: true,
+      );
       FamilyData data = await Navigator.of(context).push(route);
       if (data != null) {
         addFamilyMember(data);
@@ -34,9 +35,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
 
     void viewProfile(String userID) {
       var route = MaterialPageRoute(
-          builder: (BuildContext context) => new ProfileScreen(
-                userID: userID,
-              ));
+          builder: (BuildContext context) => new ProfileScreen(userID: userID));
       Navigator.push(context, route);
     }
 
@@ -67,6 +66,13 @@ class _FamilyScreenState extends State<FamilyScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
+                    Text(
+                      'Jumlah ahli keluarga yang berdaftar sekarang : ${model.totalRegisteredMember} orang',
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        color: Colors.white,
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 15.0),
                       child: Text(
@@ -78,28 +84,38 @@ class _FamilyScreenState extends State<FamilyScreen> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15.0),
-                      child: Text(
-                        'Ibu Bapa',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
                     model.familyResult != null &&
                             model.familyResult.father != null
                         ? ListTile(
-                            leading: CircleAvatar(
-                              child: Icon(Icons.person),
+                            leading: Container(
+                              height: screenSize.height,
+                              child: CircleAvatar(
+                                radius: screenSize.width * 0.1,
+                                child: model.familyResult.father.image != null
+                                    ? ClipOval(
+                                        child: Image.network(
+                                          model.familyResult.father.image,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : Icon(Icons.person),
+                              ),
+                            ),
+                            trailing: Container(
+                              height: screenSize.height,
+                              child: Icon(
+                                Icons.keyboard_arrow_right,
+                                color: Colors.white,
+                                size: 30.0,
+                              ),
                             ),
                             isThreeLine: true,
                             title: Text(
                               model.familyResult.father.name,
                               style: TextStyle(
                                 color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
                               ),
                             ),
                             subtitle: Column(
@@ -136,17 +152,41 @@ class _FamilyScreenState extends State<FamilyScreen> {
                             },
                           )
                         : Container(),
+                    Divider(
+                      color: Colors.white,
+                    ),
                     model.familyResult != null &&
                             model.familyResult.mother != null
                         ? ListTile(
-                            leading: CircleAvatar(
-                              child: Icon(Icons.person),
+                            leading: Container(
+                              height: screenSize.height,
+                              child: CircleAvatar(
+                                radius: screenSize.width * 0.1,
+                                child: model.familyResult.mother.image != null
+                                    ? ClipOval(
+                                        child: Image.network(
+                                          model.familyResult.mother.image,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : Icon(Icons.person),
+                              ),
+                            ),
+                            trailing: Container(
+                              height: screenSize.height,
+                              child: Icon(
+                                Icons.keyboard_arrow_right,
+                                color: Colors.white,
+                                size: 30.0,
+                              ),
                             ),
                             isThreeLine: true,
                             title: Text(
                               model.familyResult.mother.name,
                               style: TextStyle(
                                 color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
                               ),
                             ),
                             subtitle: Column(
@@ -183,31 +223,50 @@ class _FamilyScreenState extends State<FamilyScreen> {
                             },
                           )
                         : Container(),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15.0),
-                      child: Text(
-                        'Adik Beradik',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15.0,
-                          color: Colors.white,
-                        ),
-                      ),
+                    Divider(
+                      color: Colors.white,
                     ),
                     model.familyResult != null &&
                             model.familyResult.siblings.length > 0
-                        ? ListView.builder(
+                        ? ListView.separated(
+                            separatorBuilder: (context, index) => Divider(
+                              color: Colors.white,
+                            ),
                             shrinkWrap: true,
                             itemCount: model.familyResult.siblings.length,
                             itemBuilder: (context, index) => ListTile(
-                              leading: CircleAvatar(
-                                child: Icon(Icons.person),
+                              leading: Container(
+                                height: screenSize.height,
+                                child: CircleAvatar(
+                                  radius: screenSize.width * 0.1,
+                                  child: model.familyResult.siblings[index]
+                                              .image !=
+                                          null
+                                      ? ClipOval(
+                                          child: Image.network(
+                                            model.familyResult.siblings[index]
+                                                .image,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : Icon(Icons.person),
+                                ),
+                              ),
+                              trailing: Container(
+                                height: screenSize.height,
+                                child: Icon(
+                                  Icons.keyboard_arrow_right,
+                                  color: Colors.white,
+                                  size: 30.0,
+                                ),
                               ),
                               isThreeLine: true,
                               title: Text(
                                 model.familyResult.siblings[index].name,
                                 style: TextStyle(
                                   color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.0,
                                 ),
                               ),
                               subtitle: Column(
@@ -225,8 +284,12 @@ class _FamilyScreenState extends State<FamilyScreen> {
                                           ),
                                         )
                                       : Container(),
-                                  // Text(model
-                                  //     .familyResult.siblings[index].relation),
+                                  Text(
+                                    model.familyResult.siblings[index].relation,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ],
                               ),
                               onTap: () {
@@ -254,13 +317,16 @@ class _FamilyScreenState extends State<FamilyScreen> {
                               ),
                             ),
                           ),
+                    Divider(
+                      color: Colors.white,
+                    ),
                   ],
                 ),
               ),
             ),
           ),
           Positioned(
-            top: screenSize.height * 0.78,
+            top: screenSize.height * 0.7,
             right: screenSize.width * 0.1,
             child: FloatingActionButton(
               onPressed: () => _openNewFamilyDialog(model.addFamilyMember),

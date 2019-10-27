@@ -19,17 +19,15 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
     return BaseWidget<ProfileViewModel>(
       model: ProfileViewModel(
-        firestore: Firestore.instance,
-        firebaseAuth: FirebaseAuth.instance,
-        user: Provider.of<User>(context)
-      ),
+          firestore: Firestore.instance,
+          firebaseAuth: FirebaseAuth.instance,
+          user: Provider.of<User>(context)),
       onModelReady: (model) => model.getUser(widget.userID),
       builder: (context, model, child) => Scaffold(
         body: Stack(
@@ -50,8 +48,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         left: 150.0,
                       ),
                       child: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            'https://www.microsoft.com/en-us/research/wp-content/uploads/2017/09/avatar_user_36443_1506533427.jpg'),
+                        backgroundImage: model.user.image == null
+                            ? NetworkImage(
+                                'https://www.microsoft.com/en-us/research/wp-content/uploads/2017/09/avatar_user_36443_1506533427.jpg')
+                            : null,
+                        child: model.user.image != null
+                            ? ClipOval(
+                                child: Image.network(
+                                  model.user.image,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Container(),
                         radius: screenSize.height * 0.07,
                       ),
                     ),

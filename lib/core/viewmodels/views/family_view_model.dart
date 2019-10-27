@@ -13,6 +13,8 @@ class FamilyViewModel extends BaseModel {
   FamilyData get selfData => _selfData;
   String _familyID = '';
   String get familyID => _familyID;
+  int _totalRegisteredMember = 0;
+  int get totalRegisteredMember => _totalRegisteredMember;
 
   FamilyViewModel({Firestore firestore, FirebaseAuth fireAuth}) {
     _firestore = firestore;
@@ -52,6 +54,7 @@ class FamilyViewModel extends BaseModel {
           _familyID = doc.documentID;
           var fatherData = new Map<String, dynamic>.from(doc.data['father']);
           var motherData = new Map<String, dynamic>.from(doc.data['mother']);
+          _totalRegisteredMember = 2;
           var siblingsData = new List<dynamic>.from(doc.data['siblings']);
           _familyResult.father = familyFromJson(fatherData);
           _familyResult.mother = familyFromJson(motherData);
@@ -67,29 +70,25 @@ class FamilyViewModel extends BaseModel {
                 .where((s) => s.id == user.uid)
                 .first
                 .birthDate;
-            _familyResult.siblings.asMap().forEach((index, s) => {
-                  if (s.id == user.uid)
-                    {
-                      _familyResult.siblings[index].relation = 'Anda',
-                    }
-                  else if (s.birthDate.compareTo(userBirthdate) < 0)
-                    {
-                      if (s.gender == 'Lelaki')
-                        {_familyResult.siblings[index].relation = 'Abang'}
-                      else if (s.gender == 'Wanita')
-                        {_familyResult.siblings[index].relation = 'Kakak'}
-                    }
-                  else if (s.birthDate.compareTo(userBirthdate) > 0)
-                    {
-                      if (s.gender == 'Lelaki')
-                        {_familyResult.siblings[index].relation = 'Adik Lelaki'}
-                      else if (s.gender == 'Wanita')
-                        {
-                          _familyResult.siblings[index].relation =
-                              'Adik Perempuan'
-                        }
-                    }
-                });
+            _familyResult.siblings.asMap().forEach((index, s) {
+              _totalRegisteredMember++;
+              if (s.id == user.uid) {
+                _familyResult.siblings[index].relation = 'Anda';
+              }
+              if (s.birthDate.compareTo(userBirthdate) < 0) {
+                if (s.gender == 'Lelaki') {
+                  _familyResult.siblings[index].relation = 'Abang';
+                } else if (s.gender == 'Wanita') {
+                  _familyResult.siblings[index].relation = 'Kakak';
+                }
+              } else if (s.birthDate.compareTo(userBirthdate) > 0) {
+                if (s.gender == 'Lelaki') {
+                  _familyResult.siblings[index].relation = 'Adik Lelaki';
+                } else if (s.gender == 'Wanita') {
+                  _familyResult.siblings[index].relation = 'Adik Perempuan';
+                }
+              }
+            });
           } else {
             if (_familyResult.mother.id == user.uid) {
               _familyResult.mother.relation = 'Anda';

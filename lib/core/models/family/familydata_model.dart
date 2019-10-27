@@ -20,6 +20,7 @@ class FamilyData {
   String relation;
   String gender;
   String id;
+  String image;
 
   FamilyData({
     this.name,
@@ -30,6 +31,7 @@ class FamilyData {
     this.id,
     this.secondNumber,
     this.thirdNumber,
+    this.image,
   });
 
   factory FamilyData.fromJson(Map<String, dynamic> json) => new FamilyData(
@@ -42,6 +44,7 @@ class FamilyData {
         secondNumber:
             json['secondNumber'] != null ? json['secondNumber'] : null,
         thirdNumber: json['thirdNumber'] != null ? json['thirdNumber'] : null,
+        image: json['image'] != null ? json['image'] : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -52,5 +55,6 @@ class FamilyData {
         'id': id != null ? id : null,
         'secondNumber': secondNumber != null ? secondNumber : null,
         'thirdNumber': thirdNumber != null ? thirdNumber : null,
+        'image': image != null ? image : null,
       };
 }

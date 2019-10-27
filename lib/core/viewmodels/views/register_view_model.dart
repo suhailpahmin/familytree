@@ -33,22 +33,19 @@ class RegisterViewModel extends BaseModel {
 
   Future<String> registerUser() async {
     setBusy(true);
-    try {
-      var result = await _auth.register(new User(
-          email: _email,
-          password: _password,
-          name: _name,
-          gender: _gender,
-          phoneNumber: _phoneNumber,
-          secondNumber: _secondNumber,
-          thirdNumber: _thirdNumber,
-          birthDate: _birthDate));
-      setBusy(false);
-      return result;
-    } catch (err) {
-      setBusy(false);
-      return err.message;
-    }
+    var user = new User(
+      email: _email,
+      password: _password,
+      name: _name,
+      gender: _gender,
+      phoneNumber: _phoneNumber,
+      secondNumber: _secondNumber,
+      thirdNumber: _thirdNumber,
+      birthDate: _birthDate,
+    );
+    var result = await _auth.register(user);
+    setBusy(false);
+    return result;
   }
 
   void setEmail(String value) {
