@@ -15,7 +15,7 @@ class LoginFooter extends StatelessWidget {
           Text(
             'Tiada akaun?',
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.white70,
               fontSize: screenSize.height * 0.018,
             ),
           ),
@@ -26,7 +26,7 @@ class LoginFooter extends StatelessWidget {
             child: Text(
               'Daftar sekarang',
               style: TextStyle(
-                color: ColorPalette.keppelColor,
+                color: ColorPalette.teaGreenColor,
                 fontSize: screenSize.height * 0.018,
               ),
             ),

@@ -18,11 +18,12 @@ class LoginHeader extends StatelessWidget {
             color: ColorPalette.oceanGreenColor,
           ),
           Text(
-            'WARIS',
+            'WAREIH',
             style: TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.w600,
               letterSpacing: 10.0,
+              color: Colors.white,
             ),
           ),
         ],

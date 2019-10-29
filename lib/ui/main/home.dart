@@ -1,9 +1,10 @@
 import 'package:familytree/ui/main/business/business.dart';
 import 'package:familytree/ui/main/family/family.dart';
 import 'package:familytree/ui/main/lounge/lounge.dart';
+import 'package:familytree/ui/main/others/other.dart';
 import 'package:familytree/ui/main/pictories/pictories.dart';
-import 'package:familytree/ui/main/profile/profile.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen>
     PictoriesScreen(),
     LoungeScreen(),
     BusinessScreen(),
-    ProfileScreen(),
+    OthersScreen(),
   ];
 
   @override
@@ -46,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen>
           children: _children,
         ),
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Colors.transparent,
           title: Text(
             'WAREIH',
@@ -68,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen>
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w400,
-                    fontSize: screenSize.width * 0.03,
+                    fontSize: screenSize.width * 0.026,
                   ),
                 ),
               ),
@@ -82,13 +84,13 @@ class _HomeScreenState extends State<HomeScreen>
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w400,
-                    fontSize: screenSize.width * 0.03,
+                    fontSize: screenSize.width * 0.026,
                   ),
                 ),
               ),
               Tab(
                 icon: Icon(
-                  Icons.local_bar,
+                  FontAwesomeIcons.coffee,
                   color: Colors.white,
                 ),
                 child: Text(
@@ -96,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen>
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w400,
-                    fontSize: screenSize.width * 0.03,
+                    fontSize: screenSize.width * 0.026,
                   ),
                 ),
               ),
@@ -110,21 +112,21 @@ class _HomeScreenState extends State<HomeScreen>
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w400,
-                    fontSize: screenSize.width * 0.03,
+                    fontSize: screenSize.width * 0.026,
                   ),
                 ),
               ),
               Tab(
                 icon: Icon(
-                  Icons.person,
+                  Icons.list,
                   color: Colors.white,
                 ),
                 child: Text(
-                  'Profile',
+                  'Others',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w400,
-                    fontSize: screenSize.width * 0.03,
+                    fontSize: screenSize.width * 0.026,
                   ),
                 ),
               ),

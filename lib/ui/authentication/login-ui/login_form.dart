@@ -33,11 +33,17 @@ class _LoginFormState extends State<LoginForm> {
                 }
                 return null;
               },
+              style: TextStyle(
+                color: Colors.white,
+              ),
               onSaved: (value) => widget.setEmail(value),
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(15.0),
                 hintText: 'Emel',
+                hintStyle: TextStyle(
+                  color: Colors.white,
+                ),
                 suffixIcon: Icon(
                   FontAwesomeIcons.envelope,
                   color: ColorPalette.keppelColor,
@@ -48,7 +54,7 @@ class _LoginFormState extends State<LoginForm> {
                     bottomRight: Radius.circular(15.0),
                   ),
                   borderSide: BorderSide(
-                    color: Colors.black12,
+                    color: Colors.white70,
                     width: 1,
                   ),
                 ),
@@ -84,11 +90,17 @@ class _LoginFormState extends State<LoginForm> {
                 }
                 return null;
               },
+              style: TextStyle(
+                color: Colors.white,
+              ),
               onSaved: (value) => widget.setPassword(value),
               obscureText: true,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(15.0),
                 hintText: 'Kata Laluan',
+                hintStyle: TextStyle(
+                  color: Colors.white,
+                ),
                 suffixIcon: Icon(
                   Icons.lock_outline,
                   color: ColorPalette.keppelColor,
@@ -99,7 +111,7 @@ class _LoginFormState extends State<LoginForm> {
                     bottomRight: Radius.circular(15.0),
                   ),
                   borderSide: BorderSide(
-                    color: Colors.black12,
+                    color: Colors.white70,
                     width: 1,
                   ),
                 ),

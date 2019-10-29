@@ -25,23 +25,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
     var formState = _formKey.currentState;
     if (formState.validate()) {
       formState.save();
-      var userResult = await rvm.registerUser();
-      if (userResult.isNotEmpty) {
-        if (userResult == 'Has Family') {
-          Navigator.pushReplacementNamed(context, RoutePaths.Home);
-        } else if (userResult.contains('error')) {
-          Toast.show(
-            userResult,
-            context,
-            duration: Toast.LENGTH_LONG,
-            gravity: Toast.BOTTOM,
-          );
-        } else {
-          Toast.show(userResult, context,
-              duration: Toast.LENGTH_LONG, gravity: Toast.TOP);
-          Navigator.pushReplacementNamed(context, RoutePaths.FirstTime,
-              arguments: userResult);
+      try {
+        var userResult = await rvm.registerUser();
+        if (userResult.isNotEmpty) {
+          if (userResult == 'Has Family') {
+            Navigator.pushReplacementNamed(context, RoutePaths.Home);
+          } else if (userResult.contains('error')) {
+            Toast.show(
+              userResult,
+              context,
+              duration: Toast.LENGTH_LONG,
+              gravity: Toast.BOTTOM,
+            );
+          } else {
+            Navigator.pushReplacementNamed(context, RoutePaths.FirstTime,
+                arguments: userResult);
+          }
         }
+      } catch (err) {
+        Toast.show(
+          err.message,
+          context,
+          duration: Toast.LENGTH_LONG,
+          gravity: Toast.BOTTOM,
+        );
       }
     }
   }

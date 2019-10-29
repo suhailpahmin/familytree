@@ -3,6 +3,7 @@ import 'package:familytree/core/constants/app_constants.dart';
 import 'package:familytree/core/models/authentication/user_model.dart';
 import 'package:familytree/core/viewmodels/views/profile_view_model.dart';
 import 'package:familytree/ui/helper/base_widget.dart';
+import 'package:familytree/ui/main/pictories/view_pictories.dart';
 import 'package:familytree/ui/main/profile/profile-ui/edit_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,12 +31,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           user: Provider.of<User>(context)),
       onModelReady: (model) => model.getUser(widget.userID),
       builder: (context, model, child) => Scaffold(
+        appBar: AppBar(),
+        backgroundColor: Colors.black,
         body: Stack(
           children: <Widget>[
-            Container(
-              height: screenSize.height * 0.2,
-              color: ColorPalette.oceanGreenColor,
-            ),
             Container(
               width: screenSize.width,
               child: SingleChildScrollView(
@@ -43,24 +42,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(
-                        top: 80.0,
-                        left: 150.0,
-                      ),
-                      child: CircleAvatar(
-                        backgroundImage: model.user.image == null
-                            ? NetworkImage(
-                                'https://www.microsoft.com/en-us/research/wp-content/uploads/2017/09/avatar_user_36443_1506533427.jpg')
-                            : null,
-                        child: model.user.image != null
-                            ? ClipOval(
-                                child: Image.network(
-                                  model.user.image,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : Container(),
-                        radius: screenSize.height * 0.07,
+                      padding: const EdgeInsets.only(top: 80.0, bottom: 15.0),
+                      child: Center(
+                        child: CircleAvatar(
+                          backgroundImage: model.user.image == null
+                              ? NetworkImage(
+                                  'https://www.microsoft.com/en-us/research/wp-content/uploads/2017/09/avatar_user_36443_1506533427.jpg')
+                              : null,
+                          child: model.user.image != null
+                              ? ClipOval(
+                                  child: Image.network(
+                                    model.user.image,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : Container(),
+                          radius: screenSize.height * 0.07,
+                        ),
                       ),
                     ),
                     model.user != null
@@ -75,40 +73,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(
-                                    model.user.name,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 20.0,
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 5.0,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        model.user.name,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: screenSize.width * 0.06,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 15.0),
                                     child: model.user.currentState != null
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 15.0),
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.location_on,
-                                                  color: ColorPalette
-                                                      .blueSapphireColor,
+                                        ? Row(
+                                            children: [
+                                              Icon(
+                                                Icons.location_on,
+                                                color: ColorPalette
+                                                    .lightGreenColor,
+                                                size: screenSize.width * 0.04,
+                                              ),
+                                              Container(
+                                                width: screenSize.width * 0.02,
+                                              ),
+                                              Text(
+                                                model.user.currentState,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize:
+                                                      screenSize.width * 0.04,
+                                                  color: Colors.white,
                                                 ),
-                                                Container(
-                                                  width:
-                                                      screenSize.width * 0.02,
-                                                ),
-                                                Text(
-                                                  model.user.currentState,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15.0,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           )
                                         : Container(),
                                   ),
@@ -121,6 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           'Tarikh Lahir',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
+                                            color: Colors.white,
                                           ),
                                         ),
                                         Container(
@@ -151,6 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 'Tempat Lahir',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w400,
+                                                  color: Colors.white,
                                                 ),
                                               ),
                                               Container(
@@ -177,6 +183,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 'Alamat Sekarang',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w400,
+                                                  color: Colors.white,
                                                 ),
                                               ),
                                               Container(
@@ -205,6 +212,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           'Telefon Utama',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
+                                            color: Colors.white,
                                           ),
                                         ),
                                         Container(
@@ -236,6 +244,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 'Telefon Kedua',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w400,
+                                                  color: Colors.white,
                                                 ),
                                               ),
                                               Container(
@@ -266,6 +275,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 'Telefon Ketiga',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w400,
+                                                  color: Colors.white,
                                                 ),
                                               ),
                                               Container(
@@ -316,7 +326,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: Text(
                                 'Kemaskini Profil',
                                 style: TextStyle(
-                                  color: ColorPalette.blueSapphireColor,
+                                  color: ColorPalette.teaGreenColor,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -344,12 +355,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: Text(
                                 'Log Keluar',
                                 style: TextStyle(
-                                  color: ColorPalette.blueSapphireColor,
+                                  color: ColorPalette.teaGreenColor,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
                           )
                         : Container(),
+                    widget.userID != null
+                        ? Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: Divider(
+                              color: ColorPalette.keppelColor,
+                              thickness: 0.8,
+                            ),
+                          )
+                        : Container(),
+                    widget.userID == null
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: FlatButton(
+                              onPressed: () {
+                                var route = MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ViewPictoriesScreen(
+                                    userID: widget.userID,
+                                  ),
+                                );
+                                Navigator.push(context, route);
+                              },
+                              child: Text(
+                                'Lihat Pictories',
+                                style: TextStyle(
+                                  color: ColorPalette.teaGreenColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
                     widget.userID != null
                         ? Padding(
                             padding:

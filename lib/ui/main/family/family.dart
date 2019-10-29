@@ -232,6 +232,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
                             separatorBuilder: (context, index) => Divider(
                               color: Colors.white,
                             ),
+                            physics: ClampingScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: model.familyResult.siblings.length,
                             itemBuilder: (context, index) => ListTile(
@@ -285,7 +286,12 @@ class _FamilyScreenState extends State<FamilyScreen> {
                                         )
                                       : Container(),
                                   Text(
-                                    model.familyResult.siblings[index].relation,
+                                    model.familyResult.siblings[index]
+                                                .relation !=
+                                            null
+                                        ? model.familyResult.siblings[index]
+                                            .relation
+                                        : 'Adik Beradik (Baru)',
                                     style: TextStyle(
                                       color: Colors.white,
                                     ),
@@ -332,7 +338,6 @@ class _FamilyScreenState extends State<FamilyScreen> {
               onPressed: () => _openNewFamilyDialog(model.addFamilyMember),
               child: Icon(Icons.add),
               backgroundColor: ColorPalette.keppelColor,
-              mini: true,
             ),
           ),
           model.busy ? LoadingOverlay() : Container(),

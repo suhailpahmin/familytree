@@ -1,4 +1,6 @@
 // List<String> familiesToJson(List<FamilyData> data) => List<String>.from(data.map((x) => x.toJson()));
+import 'package:intl/intl.dart';
+
 List<Map<String, dynamic>> familiesToJson(List<FamilyData> data) =>
     List<Map<String, dynamic>>.from(data.map((x) => x.toJson()));
 
@@ -37,8 +39,9 @@ class FamilyData {
   factory FamilyData.fromJson(Map<String, dynamic> json) => new FamilyData(
         name: json['name'],
         phoneNumber: json['phoneNumber'],
-        birthDate:
-            json['birthDate'] != null ? json['birthDate'].toDate() : null,
+        birthDate: json['birthDate'] != null
+            ? DateTime.parse(json['birthDate'])
+            : null,
         gender: json['gender'] != null ? json['gender'] : null,
         id: json['id'] != null ? json['id'] : null,
         secondNumber:
@@ -50,7 +53,9 @@ class FamilyData {
   Map<String, dynamic> toJson() => {
         'name': name,
         'phoneNumber': phoneNumber,
-        'birthDate': birthDate != null ? birthDate : null,
+        'birthDate': birthDate != null
+            ? DateFormat('yyyyMMddTHHmmss').format(birthDate)
+            : null,
         'gender': gender != null ? gender : null,
         'id': id != null ? id : null,
         'secondNumber': secondNumber != null ? secondNumber : null,

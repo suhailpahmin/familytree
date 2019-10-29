@@ -49,6 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return BaseWidget<LoginViewModel>(
       model: LoginViewModel(firebaseAuth: Provider.of(context)),
       builder: (context, model, child) => Scaffold(
+        backgroundColor: Colors.black,
           body: Stack(
         children: <Widget>[
           Center(

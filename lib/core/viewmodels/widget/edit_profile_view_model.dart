@@ -19,18 +19,31 @@ class EditProfileViewModel extends BaseModel {
   String get currentState => _currentState;
   Firestore _firestore;
   FirebaseStorage _fireStorage;
+  File _image;
+  File get image => _image;
   String _profileImage;
   String get profileImage => _profileImage;
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   SharedPreferences _sharedPreferences;
 
-  EditProfileViewModel({Firestore firestore, FirebaseStorage firebaseStorage}) {
+  EditProfileViewModel({Firestore firestore, FirebaseStorage firebaseStorage, String currentImage}) {
     _firestore = firestore;
     _fireStorage = firebaseStorage;
+    _profileImage = currentImage;
   }
 
   Future updateProfile(User user) async {
     setBusy(true);
+    if (image != null) {
+      final StorageReference storageReference =
+          _fireStorage.ref().child('profilepictures/${basename(image.path)}');
+      StorageUploadTask uploadTask = storageReference.putFile(image);
+      final StorageTaskSnapshot downloadURL = (await uploadTask.onComplete);
+      String imageURL = (await downloadURL.ref.getDownloadURL());
+      _profileImage = imageURL;
+      notifyListeners();
+    }
+
     await _firestore.collection('users').document(user.id).updateData(
       {
         'birthPlace': _birthPlace,
@@ -39,6 +52,7 @@ class EditProfileViewModel extends BaseModel {
         'image': _profileImage,
       },
     );
+
     await _firestore
         .collection('userfamily')
         .where('userID', isEqualTo: user.id)
@@ -97,27 +111,32 @@ class EditProfileViewModel extends BaseModel {
     setBusy(false);
   }
 
-  Future<bool> uploadProfileImage(File image) async {
-    if (image != null) {
-      final StorageReference storageReference =
-          _fireStorage.ref().child('profilepictures/${basename(image.path)}');
-      StorageUploadTask uploadTask = storageReference.putFile(image);
-      final StorageTaskSnapshot downloadURL = (await uploadTask.onComplete);
-      String imageURL = (await downloadURL.ref.getDownloadURL());
-      if (imageURL != null && imageURL.isNotEmpty) {
-        _profileImage = imageURL;
-        notifyListeners();
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
+  // Future<bool> uploadProfileImage(File image) async {
+  //   if (image != null) {
+  //     final StorageReference storageReference =
+  //         _fireStorage.ref().child('profilepictures/${basename(image.path)}');
+  //     StorageUploadTask uploadTask = storageReference.putFile(image);
+  //     final StorageTaskSnapshot downloadURL = (await uploadTask.onComplete);
+  //     String imageURL = (await downloadURL.ref.getDownloadURL());
+  //     if (imageURL != null && imageURL.isNotEmpty) {
+  //       _profileImage = imageURL;
+  //       notifyListeners();
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   void setBirthPlace(String value) {
     _birthPlace = value;
+    notifyListeners();
+  }
+
+  void setImage(File image) {
+    _image = image;
     notifyListeners();
   }
 
