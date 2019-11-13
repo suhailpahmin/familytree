@@ -9,3 +9,7 @@ abstract class AuthApi {
   Future<void> sendEmailVerification();
   Future<bool> isEmailVerified();
 }
+
+abstract class OneWaySmsAPI {
+  Future<bool> sendSms(String numbers, String message);
+}

@@ -1,4 +1,5 @@
 import 'package:familytree/core/constants/app_constants.dart';
+import 'package:familytree/core/models/authentication/firsttime_model.dart';
 import 'package:familytree/core/viewmodels/views/register_view_model.dart';
 import 'package:familytree/ui/helper/base_widget.dart';
 import 'package:familytree/ui/helper/loading_overlay.dart';
@@ -38,8 +39,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               gravity: Toast.BOTTOM,
             );
           } else {
+            FirstTime firstTimeData = new FirstTime(userID: userResult, userName: rvm.name);
             Navigator.pushReplacementNamed(context, RoutePaths.FirstTime,
-                arguments: userResult);
+                arguments: firstTimeData);
           }
         }
       } catch (err) {

@@ -1,4 +1,5 @@
 import 'package:familytree/core/constants/app_constants.dart';
+import 'package:familytree/core/models/authentication/firsttime_model.dart';
 import 'package:familytree/core/viewmodels/views/firsttime_view_model.dart';
 import 'package:familytree/ui/helper/base_widget.dart';
 import 'package:familytree/ui/helper/loading_overlay.dart';
@@ -8,8 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
 class FirstTimeScreen extends StatefulWidget {
-  final String userID;
-  FirstTimeScreen({this.userID});
+  final FirstTime firstTime;
+  FirstTimeScreen({this.firstTime});
 
   _FirstTimeScreenState createState() => _FirstTimeScreenState();
 }
@@ -21,7 +22,10 @@ class _FirstTimeScreenState extends State<FirstTimeScreen> {
 
     return Scaffold(
       body: BaseWidget<FirstTimeViewModel>(
-        model: FirstTimeViewModel(firebaseAuthProvider: Provider.of(context)),
+        model: FirstTimeViewModel(
+          firebaseAuthProvider: Provider.of(context),
+          smsProvider: Provider.of(context),
+        ),
         builder: (context, model, child) => Stack(
           children: <Widget>[
             Container(
@@ -171,12 +175,15 @@ class _FirstTimeScreenState extends State<FirstTimeScreen> {
                           child: RaisedButton(
                             color: ColorPalette.blueSapphireColor,
                             onPressed: () async {
-                              var result = await model.registerFamily(widget.userID);
+                              var result =
+                                  await model.registerFamily(widget.firstTime);
                               if (result == 'Success') {
                                 return Navigator.pushReplacementNamed(
                                     context, RoutePaths.Home);
                               } else {
-                                Toast.show(result, context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                                Toast.show(result, context,
+                                    duration: Toast.LENGTH_LONG,
+                                    gravity: Toast.BOTTOM);
                               }
                               return null;
                             },

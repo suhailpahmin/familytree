@@ -1,5 +1,7 @@
+import 'package:familytree/core/models/authentication/firsttime_model.dart';
 import 'package:familytree/core/models/family/familydata_model.dart';
 import 'package:familytree/core/providers/firebase_auth.dart';
+import 'package:familytree/core/providers/sms_provider.dart';
 import 'package:familytree/core/viewmodels/base_model.dart';
 
 class FirstTimeViewModel extends BaseModel {
@@ -10,6 +12,7 @@ class FirstTimeViewModel extends BaseModel {
   FamilyData _father;
   FamilyData get father => _father;
   FirebaseAuthProvider _firebaseAuthProvider;
+  SmsProvider _smsProvider;
 
   String _name = '';
   String get name => _name;
@@ -22,15 +25,28 @@ class FirstTimeViewModel extends BaseModel {
   String _gender = "Lelaki";
   String get gender => _gender;
 
-  FirstTimeViewModel({FirebaseAuthProvider firebaseAuthProvider}) {
+  FirstTimeViewModel({FirebaseAuthProvider firebaseAuthProvider, SmsProvider smsProvider}) {
     _firebaseAuthProvider = firebaseAuthProvider;
+    _smsProvider = smsProvider;
   }
 
-  Future<String> registerFamily(String userID) async {
+  Future<String> registerFamily(FirstTime firstTime) async {
     try {
       setBusy(true);
       var registerResult = await _firebaseAuthProvider.registerFamily(
-          userID, father, mother, siblings);
+          firstTime.userID, father, mother, siblings);
+      if (registerResult == 'Success') {
+        String numbers = '${father.phoneNumber},${mother.phoneNumber}';
+        // siblings.forEach((s) => {
+        //   numbers += ',${s.phoneNumber}'
+        // });
+        var sendSmsResult = await _smsProvider.sendSms(numbers, 'You are invited to Wareih by ${firstTime.userName}! Download it now on Playstore to join the family!');
+        if (sendSmsResult) {
+          return registerResult;
+        } else {
+          return 'SMS Failed';
+        }
+      }
       setBusy(false);
       return registerResult;
     } catch (err) {

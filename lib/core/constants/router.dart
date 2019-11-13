@@ -1,4 +1,5 @@
 import 'package:familytree/core/constants/app_constants.dart';
+import 'package:familytree/core/models/authentication/firsttime_model.dart';
 import 'package:familytree/ui/authentication/login.dart';
 import 'package:familytree/ui/authentication/register.dart';
 import 'package:familytree/ui/main/firsttime.dart';
@@ -12,8 +13,12 @@ class Router {
       case RoutePaths.Home:
         return MaterialPageRoute(builder: (context) => HomeScreen());
       case RoutePaths.FirstTime:
-        String userID = settings.arguments;
-        return MaterialPageRoute(builder: (context) => FirstTimeScreen(userID: userID));
+        FirstTime firstTime = settings.arguments;
+        return MaterialPageRoute(
+          builder: (context) => FirstTimeScreen(
+            firstTime: firstTime,
+          ),
+        );
       case RoutePaths.Login:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case RoutePaths.Root:
