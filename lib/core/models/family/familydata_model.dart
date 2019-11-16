@@ -12,6 +12,8 @@ List<FamilyData> familiesFromJson(List<dynamic> jsonData) =>
 
 FamilyData familyFromJson(Map<String, dynamic> json) =>
     FamilyData.fromJson(json);
+  
+Map<String,dynamic> familyToJson(FamilyData data) => Map<String,dynamic>.from(data.toJson());
 
 class FamilyData {
   String name;

@@ -13,6 +13,8 @@ class FamilyRegisterViewModel extends BaseModel {
   int get genderIndex => _genderIndex;
   String _gender = "Lelaki";
   String get gender => _gender;
+  String _relation = "Adik Beradik";
+  String get relation => _relation;
 
   void setPhoneNumber(String value) {
     _phoneNumber = value;
@@ -34,6 +36,11 @@ class FamilyRegisterViewModel extends BaseModel {
       _validNumber = value;
       notifyListeners();
     }
+  }
+
+  void setRelation(String value) {
+    _relation = value;
+    notifyListeners();
   }
 
   void setGender(int value) {

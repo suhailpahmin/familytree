@@ -16,6 +16,7 @@ class _NewFamilyDialogState extends State<NewFamilyDialog> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _dateFormat = 'dd MM yyyy';
   DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
+  List<String> relationOption = ['Adik Beradik', 'Isteri', 'Suami', 'Anak'];
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +63,19 @@ class _NewFamilyDialogState extends State<NewFamilyDialog> {
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text('Hubungan'),
-                                  Text('Adik Beradik'),
+                                  DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: model.relation,
+                                      isDense: true,
+                                      onChanged: model.setRelation,
+                                      items: relationOption.map((String value) {
+                                        return new DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
@@ -233,6 +246,7 @@ class _NewFamilyDialogState extends State<NewFamilyDialog> {
                                 phoneNumber: model.phoneNumber,
                                 birthDate: model.birthDate,
                                 gender: model.gender,
+                                relation: model.relation,
                               ),
                             );
                           }

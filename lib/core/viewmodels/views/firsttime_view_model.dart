@@ -25,7 +25,8 @@ class FirstTimeViewModel extends BaseModel {
   String _gender = "Lelaki";
   String get gender => _gender;
 
-  FirstTimeViewModel({FirebaseAuthProvider firebaseAuthProvider, SmsProvider smsProvider}) {
+  FirstTimeViewModel(
+      {FirebaseAuthProvider firebaseAuthProvider, SmsProvider smsProvider}) {
     _firebaseAuthProvider = firebaseAuthProvider;
     _smsProvider = smsProvider;
   }
@@ -37,10 +38,11 @@ class FirstTimeViewModel extends BaseModel {
           firstTime.userID, father, mother, siblings);
       if (registerResult == 'Success') {
         String numbers = '${father.phoneNumber},${mother.phoneNumber}';
-        // siblings.forEach((s) => {
-        //   numbers += ',${s.phoneNumber}'
-        // });
-        var sendSmsResult = await _smsProvider.sendSms(numbers, 'You are invited to Wareih by ${firstTime.userName}! Download it now on Playstore to join the family!');
+        siblings.forEach((s) => {
+              if (s.id != firstTime.userID) {numbers += ',${s.phoneNumber}'}
+            });
+        var sendSmsResult = await _smsProvider.sendSms(numbers,
+            'You are invited to Wareih by ${firstTime.userName}! Download it now on Playstore to join the family!');
         if (sendSmsResult) {
           return registerResult;
         } else {
